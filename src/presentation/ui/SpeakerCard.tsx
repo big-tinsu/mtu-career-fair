@@ -1,9 +1,10 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { FiLinkedin, FiTwitter } from 'react-icons/fi';
+import Image from 'next/image';
+import { FiLinkedin } from 'react-icons/fi';
 import { SpeakerEntity, SpeakerType } from '@/domain/types';
-import { cardHover, fadeInUp } from '@/lib/animations';
+import { fadeInUp } from '@/lib/animations';
 import { cn, getInitials } from '@/lib/utils';
 import { Badge } from './Badge';
 
@@ -11,104 +12,88 @@ interface SpeakerCardProps {
   speaker: SpeakerEntity;
 }
 
-const typeConfig: Record<SpeakerType, { label: string; variant: 'purple' | 'blue' | 'green' | 'yellow' }> = {
-  keynote: { label: 'Keynote', variant: 'yellow' },
-  speaker: { label: 'Speaker', variant: 'purple' },
-  panelist: { label: 'Panelist', variant: 'blue' },
-  host: { label: 'Host', variant: 'green' },
+const typeConfig: Record<SpeakerType, { label: string; variant: 'green' | 'gold' | 'blue' | 'cream' }> = {
+  keynote: { label: 'Keynote', variant: 'gold' },
+  speaker: { label: 'Speaker', variant: 'green' },
+  panelist: { label: 'Panelist', variant: 'green' },
+  host: { label: 'Host', variant: 'cream' },
 };
 
-const avatarGradients = [
-  'from-[#6F00FF] to-[#08BFFF]',
-  'from-[#FF1D45] to-[#6F00FF]',
-  'from-[#08BFFF] to-[#0CAC91]',
-  'from-[#F59929] to-[#FF1D45]',
-  'from-[#EA157F] to-[#6F00FF]',
-  'from-[#0CAC91] to-[#08BFFF]',
+const avatarColors = [
+  'from-[#226C3D] to-[#4CAF70]',
+  'from-[#1A5430] to-[#226C3D]',
+  'from-[#8B6914] to-[#C9A227]',
+  'from-[#004B87] to-[#0071C5]',
 ];
 
 export function SpeakerCard({ speaker }: SpeakerCardProps) {
   const { label, variant } = typeConfig[speaker.type];
   const gradientIdx =
-    speaker.id
-      .split('')
-      .reduce((acc, c) => acc + c.charCodeAt(0), 0) % avatarGradients.length;
+    speaker.id.split('').reduce((acc, c) => acc + c.charCodeAt(0), 0) % avatarColors.length;
 
   return (
     <motion.div
       variants={fadeInUp}
-      initial="rest"
-      whileHover="hover"
-      animate="rest"
+      className={cn(
+        'group flex flex-col h-full bg-white rounded-2xl overflow-hidden',
+        'border border-[#E8D9BE] hover:border-[rgba(34,108,61,0.3)]',
+        'shadow-[0_2px_12px_rgba(28,28,28,0.06)] hover:shadow-[0_8px_32px_rgba(28,28,28,0.12)]',
+        'transition-all duration-300',
+      )}
     >
-      <motion.div
-        variants={cardHover}
-        className={cn(
-          'relative flex flex-col p-6 rounded-2xl h-full',
-          'bg-white/[0.03] border border-white/[0.08]',
-          'hover:border-[rgba(111,0,255,0.3)] hover:bg-[rgba(111,0,255,0.05)]',
-          'transition-colors duration-300',
-        )}
-      >
-        <div className="flex items-start gap-4 mb-4">
+      <div className="relative h-48 overflow-hidden">
+        {speaker.photo ? (
+          <Image
+            src={speaker.photo}
+            alt={speaker.name}
+            fill
+            className="object-cover group-hover:scale-105 transition-transform duration-500"
+          />
+        ) : (
           <div
             className={cn(
-              'w-14 h-14 rounded-xl flex items-center justify-center text-white font-bold text-lg flex-shrink-0',
-              `bg-gradient-to-br ${avatarGradients[gradientIdx]}`,
+              'w-full h-full flex items-center justify-center text-white text-4xl font-bold font-manrope',
+              `bg-gradient-to-br ${avatarColors[gradientIdx]}`,
             )}
           >
             {getInitials(speaker.name)}
           </div>
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 mb-1 flex-wrap">
-              <h3 className="text-white font-semibold text-base leading-tight">{speaker.name}</h3>
-            </div>
-            <p className="text-white/50 text-xs leading-tight truncate">{speaker.title}</p>
-            <p className="text-[#C192FF] text-xs font-medium mt-0.5">{speaker.company}</p>
-          </div>
-          <Badge variant={variant} className="flex-shrink-0 hidden sm:inline-flex">
-            {label}
-          </Badge>
+        )}
+        <div className="absolute top-3 right-3">
+          <Badge variant={variant}>{label}</Badge>
         </div>
+      </div>
 
-        <p className="text-white/50 text-sm leading-relaxed flex-1">{speaker.bio}</p>
+      <div className="flex flex-col flex-1 p-5">
+        <h3 className="font-manrope font-bold text-[#1A1A1A] text-base leading-tight mb-0.5">
+          {speaker.name}
+        </h3>
+        <p className="text-[#5C5046] text-xs mb-1">{speaker.title}</p>
+        <p className="text-[#226C3D] text-xs font-semibold mb-3">{speaker.company}</p>
+
+        <p className="text-[#6B5E4A] text-sm leading-relaxed flex-1">{speaker.bio}</p>
 
         {speaker.tags && (
-          <div className="flex flex-wrap gap-1.5 mt-4">
+          <div className="flex flex-wrap gap-1.5 mt-3">
             {speaker.tags.map((tag) => (
-              <span
-                key={tag}
-                className="px-2 py-0.5 rounded-md bg-white/5 text-white/40 text-xs"
-              >
+              <span key={tag} className="px-2 py-0.5 rounded-md bg-[#F2E4CC] text-[#6B5E4A] text-xs">
                 {tag}
               </span>
             ))}
           </div>
         )}
 
-        {(speaker.linkedIn || speaker.twitter) && (
-          <div className="flex gap-3 mt-4 pt-4 border-t border-white/[0.06]">
-            {speaker.linkedIn && (
-              <a
-                href={speaker.linkedIn}
-                className="text-white/30 hover:text-[#08BFFF] transition-colors"
-                aria-label="LinkedIn"
-              >
-                <FiLinkedin size={16} />
-              </a>
-            )}
-            {speaker.twitter && (
-              <a
-                href={speaker.twitter}
-                className="text-white/30 hover:text-[#08BFFF] transition-colors"
-                aria-label="Twitter"
-              >
-                <FiTwitter size={16} />
-              </a>
-            )}
+        {speaker.linkedIn && (
+          <div className="mt-4 pt-4 border-t border-[#F0E8D8]">
+            <a
+              href={speaker.linkedIn}
+              className="flex items-center gap-1.5 text-xs text-[#9C8E7C] hover:text-[#226C3D] transition-colors"
+            >
+              <FiLinkedin size={13} /> LinkedIn
+            </a>
           </div>
         )}
-      </motion.div>
+      </div>
     </motion.div>
   );
 }

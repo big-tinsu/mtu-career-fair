@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils';
 
-type BadgeVariant = 'purple' | 'blue' | 'green' | 'yellow' | 'red' | 'neutral';
+type BadgeVariant = 'green' | 'cream' | 'gold' | 'blue' | 'red' | 'neutral';
 
 interface BadgeProps {
   children: React.ReactNode;
@@ -10,28 +10,28 @@ interface BadgeProps {
 }
 
 const variantStyles: Record<BadgeVariant, string> = {
-  purple: 'bg-[rgba(111,0,255,0.15)] text-[#C192FF] border border-[rgba(111,0,255,0.3)]',
-  blue: 'bg-[rgba(8,191,255,0.1)] text-[#08BFFF] border border-[rgba(8,191,255,0.25)]',
-  green: 'bg-[rgba(20,174,92,0.12)] text-[#4ADE80] border border-[rgba(20,174,92,0.25)]',
-  yellow: 'bg-[rgba(245,153,41,0.12)] text-[#FCD34D] border border-[rgba(245,153,41,0.25)]',
-  red: 'bg-[rgba(255,29,69,0.12)] text-[#F87171] border border-[rgba(255,29,69,0.25)]',
-  neutral: 'bg-white/5 text-white/60 border border-white/10',
+  green: 'bg-[rgba(34,108,61,0.1)] text-[#226C3D] border border-[rgba(34,108,61,0.2)]',
+  cream: 'bg-[#F2E4CC] text-[#5C5046] border border-[#E0D1B5]',
+  gold: 'bg-[rgba(180,130,20,0.1)] text-[#8B6914] border border-[rgba(180,130,20,0.2)]',
+  blue: 'bg-[rgba(0,75,135,0.08)] text-[#004B87] border border-[rgba(0,75,135,0.15)]',
+  red: 'bg-[rgba(220,38,38,0.08)] text-[#B91C1C] border border-[rgba(220,38,38,0.15)]',
+  neutral: 'bg-[#F5F0E8] text-[#6B5E4A] border border-[#E0D1B5]',
 };
 
 const dotColors: Record<BadgeVariant, string> = {
-  purple: 'bg-[#C192FF]',
-  blue: 'bg-[#08BFFF]',
-  green: 'bg-[#4ADE80]',
-  yellow: 'bg-[#FCD34D]',
-  red: 'bg-[#F87171]',
-  neutral: 'bg-white/40',
+  green: 'bg-[#226C3D]',
+  cream: 'bg-[#9C8E7C]',
+  gold: 'bg-[#8B6914]',
+  blue: 'bg-[#004B87]',
+  red: 'bg-[#B91C1C]',
+  neutral: 'bg-[#9C8E7C]',
 };
 
 export function Badge({ children, variant = 'neutral', className, dot }: BadgeProps) {
   return (
     <span
       className={cn(
-        'inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium',
+        'inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold',
         variantStyles[variant],
         className,
       )}

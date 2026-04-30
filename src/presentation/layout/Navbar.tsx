@@ -20,8 +20,7 @@ const navLinks = [
 ];
 
 function scrollTo(id: string) {
-  const el = document.querySelector(id);
-  if (el) el.scrollIntoView({ behavior: 'smooth' });
+  document.querySelector(id)?.scrollIntoView({ behavior: 'smooth' });
 }
 
 export function Navbar({ event }: NavbarProps) {
@@ -29,7 +28,7 @@ export function Navbar({ event }: NavbarProps) {
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    const handler = () => setScrolled(window.scrollY > 40);
+    const handler = () => setScrolled(window.scrollY > 60);
     window.addEventListener('scroll', handler, { passive: true });
     return () => window.removeEventListener('scroll', handler);
   }, []);
@@ -39,22 +38,25 @@ export function Navbar({ event }: NavbarProps) {
       <motion.header
         initial={{ y: -80, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
         className={cn(
-          'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
+          'fixed top-0 left-0 right-0 z-50 transition-all duration-400',
           scrolled
-            ? 'py-3 bg-[rgba(4,0,25,0.85)] backdrop-blur-xl border-b border-white/[0.06]'
+            ? 'py-3 bg-white/90 backdrop-blur-xl border-b border-[#E8D9BE] shadow-[0_2px_20px_rgba(28,28,28,0.06)]'
             : 'py-5 bg-transparent',
         )}
       >
         <div className="layout flex items-center justify-between gap-4">
           <Link href={`/events/${event.slug}`} className="flex items-center gap-2.5 group">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#6F00FF] to-[#08BFFF] flex items-center justify-center text-white font-bold text-sm shadow-[0_0_16px_rgba(111,0,255,0.4)]">
-              M
+            <div className="w-8 h-8 rounded-lg bg-[#226C3D] flex items-center justify-center text-white font-bold text-sm shadow-[0_2px_8px_rgba(34,108,61,0.3)]">
+              A
             </div>
-            <span className="text-white font-semibold text-sm hidden sm:block group-hover:text-white/80 transition-colors">
-              MTU Career Fair
-            </span>
+            <div className="hidden sm:block">
+              <span className="text-[#1A1A1A] font-bold text-sm font-manrope leading-tight block group-hover:text-[#226C3D] transition-colors">
+                AURA Career Fair
+              </span>
+              <span className="text-[#9C8E7C] text-[10px] leading-none">Mountain Top University</span>
+            </div>
           </Link>
 
           <nav className="hidden md:flex items-center gap-1">
@@ -62,7 +64,7 @@ export function Navbar({ event }: NavbarProps) {
               <button
                 key={link.href}
                 onClick={() => scrollTo(link.href)}
-                className="px-4 py-2 text-sm text-white/60 hover:text-white rounded-lg hover:bg-white/5 transition-all duration-150 cursor-pointer"
+                className="px-4 py-2 text-sm text-[#5C5046] hover:text-[#226C3D] rounded-xl hover:bg-[rgba(34,108,61,0.06)] transition-all duration-150 cursor-pointer font-medium"
               >
                 {link.label}
               </button>
@@ -75,8 +77,7 @@ export function Navbar({ event }: NavbarProps) {
             </Link>
             <button
               onClick={() => setMenuOpen((v) => !v)}
-              className="md:hidden w-9 h-9 flex items-center justify-center rounded-lg bg-white/5 text-white/70 hover:text-white hover:bg-white/10 transition-all"
-              aria-label="Menu"
+              className="md:hidden w-9 h-9 flex items-center justify-center rounded-xl border border-[#E0D1B5] text-[#5C5046] hover:text-[#226C3D] hover:bg-[rgba(34,108,61,0.06)] transition-all"
             >
               {menuOpen ? <FiX size={18} /> : <FiMenu size={18} />}
             </button>
@@ -87,17 +88,17 @@ export function Navbar({ event }: NavbarProps) {
       <AnimatePresence>
         {menuOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -10 }}
+            initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
+            exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-x-0 top-[60px] z-40 md:hidden bg-[rgba(4,0,25,0.97)] backdrop-blur-xl border-b border-white/[0.06] px-4 py-4 space-y-1"
+            className="fixed inset-x-0 top-[64px] z-40 md:hidden bg-white/95 backdrop-blur-xl border-b border-[#E8D9BE] px-4 py-3 space-y-1 shadow-lg"
           >
             {navLinks.map((link) => (
               <button
                 key={link.href}
                 onClick={() => { scrollTo(link.href); setMenuOpen(false); }}
-                className="w-full text-left px-4 py-3 text-white/70 hover:text-white rounded-xl hover:bg-white/5 transition-all text-sm"
+                className="w-full text-left px-4 py-3 text-[#5C5046] hover:text-[#226C3D] rounded-xl hover:bg-[rgba(34,108,61,0.06)] transition-all text-sm font-medium"
               >
                 {link.label}
               </button>

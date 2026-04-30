@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 import { PartnerEntity, PartnerTier } from '@/domain/types';
 import { fadeInUp, staggerContainer, viewportConfig } from '@/lib/animations';
 import { cn } from '@/lib/utils';
@@ -9,59 +10,38 @@ interface PartnerLogoGridProps {
   partners: PartnerEntity[];
 }
 
-const tierConfig: Record<
-  PartnerTier,
-  { label: string; cardSize: string; textSize: string; order: number }
-> = {
-  platinum: {
-    label: 'Platinum Partners',
-    cardSize: 'h-24 min-w-[180px]',
-    textSize: 'text-xl font-bold',
-    order: 1,
-  },
-  gold: {
-    label: 'Gold Partners',
-    cardSize: 'h-20 min-w-[150px]',
-    textSize: 'text-lg font-semibold',
-    order: 2,
-  },
-  silver: {
-    label: 'Silver Partners',
-    cardSize: 'h-16 min-w-[130px]',
-    textSize: 'text-base font-medium',
-    order: 3,
-  },
-  media: {
-    label: 'Media Partners',
-    cardSize: 'h-14 min-w-[120px]',
-    textSize: 'text-sm font-medium',
-    order: 4,
-  },
+const tierConfig: Record<PartnerTier, { label: string; cardH: string; textSize: string; order: number }> = {
+  platinum: { label: 'Platinum Partners', cardH: 'h-24', textSize: 'text-2xl font-bold', order: 1 },
+  gold: { label: 'Gold Partners', cardH: 'h-20', textSize: 'text-xl font-semibold', order: 2 },
+  silver: { label: 'Silver Partners', cardH: 'h-16', textSize: 'text-base font-medium', order: 3 },
+  media: { label: 'Media Partners', cardH: 'h-14', textSize: 'text-sm font-medium', order: 4 },
 };
 
-function PartnerCard({ partner, cardSize, textSize }: { partner: PartnerEntity; cardSize: string; textSize: string }) {
+function PartnerCard({ partner, cardH, textSize }: { partner: PartnerEntity; cardH: string; textSize: string }) {
   return (
     <motion.a
       variants={fadeInUp}
       href={partner.website ?? '#'}
       target="_blank"
       rel="noopener noreferrer"
-      whileHover={{ scale: 1.04, y: -2 }}
-      transition={{ duration: 0.2 }}
+      whileHover={{ scale: 1.03, y: -2, transition: { duration: 0.2 } }}
       className={cn(
-        'flex items-center justify-center px-6 rounded-xl',
-        'bg-white/[0.03] border border-white/[0.07]',
-        'hover:border-white/[0.15] hover:bg-white/[0.06]',
-        'transition-colors duration-200 cursor-pointer',
-        cardSize,
+        'flex items-center justify-center px-8 rounded-2xl min-w-[140px]',
+        'bg-white border border-[#E8D9BE] hover:border-[rgba(34,108,61,0.3)]',
+        'shadow-[0_2px_8px_rgba(28,28,28,0.05)] hover:shadow-[0_6px_20px_rgba(28,28,28,0.1)]',
+        'transition-all duration-200 cursor-pointer',
+        cardH,
       )}
     >
-      <span
-        className={cn('font-figtree tracking-tight', textSize)}
-        style={{ color: partner.logoColor ?? '#ffffff' }}
-      >
-        {partner.name}
-      </span>
+      {partner.logo ? (
+        <div className="relative w-28 h-10">
+          <Image src={partner.logo} alt={partner.name} fill className="object-contain" />
+        </div>
+      ) : (
+        <span className={cn('font-manrope tracking-tight', textSize)} style={{ color: partner.logoColor ?? '#226C3D' }}>
+          {partner.name}
+        </span>
+      )}
     </motion.a>
   );
 }
@@ -74,12 +54,12 @@ export function PartnerLogoGrid({ partners }: PartnerLogoGridProps) {
   return (
     <div className="space-y-12">
       {tiers.map((tier) => {
-        const { label, cardSize, textSize } = tierConfig[tier];
+        const { label, cardH, textSize } = tierConfig[tier];
         const tierPartners = partners.filter((p) => p.tier === tier);
 
         return (
           <div key={tier}>
-            <p className="text-center text-xs font-semibold uppercase tracking-[0.2em] text-white/30 mb-6">
+            <p className="text-center text-xs font-bold uppercase tracking-[0.2em] text-[#9C8E7C] mb-6">
               {label}
             </p>
             <motion.div
@@ -90,12 +70,7 @@ export function PartnerLogoGrid({ partners }: PartnerLogoGridProps) {
               className="flex flex-wrap justify-center gap-4"
             >
               {tierPartners.map((partner) => (
-                <PartnerCard
-                  key={partner.id}
-                  partner={partner}
-                  cardSize={cardSize}
-                  textSize={textSize}
-                />
+                <PartnerCard key={partner.id} partner={partner} cardH={cardH} textSize={textSize} />
               ))}
             </motion.div>
           </div>

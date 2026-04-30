@@ -1,12 +1,9 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { staggerContainerFast, fadeInUp, viewportConfig } from '@/lib/animations';
-
-interface StatItem {
-  label: string;
-  value: string;
-}
+import { StatItem } from '@/domain/types';
+import { staggerContainerFast, viewportConfig } from '@/lib/animations';
+import { CountUp } from '../ui/CountUp';
 
 interface StatsSectionProps {
   stats: StatItem[];
@@ -14,25 +11,28 @@ interface StatsSectionProps {
 
 export function StatsSection({ stats }: StatsSectionProps) {
   return (
-    <section className="py-16 border-y border-white/[0.06] bg-[rgba(111,0,255,0.04)]">
+    <section className="py-16 bg-white border-y border-[#E8D9BE]">
       <div className="layout">
         <motion.div
           variants={staggerContainerFast}
           initial="hidden"
           whileInView="visible"
           viewport={viewportConfig}
-          className="grid grid-cols-2 md:grid-cols-4 gap-8"
+          className="grid grid-cols-2 md:grid-cols-4 gap-0 divide-x divide-[#E8D9BE]"
         >
-          {stats.map((stat) => (
+          {stats.map((stat, i) => (
             <motion.div
               key={stat.label}
-              variants={fadeInUp}
-              className="text-center"
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={viewportConfig}
+              transition={{ duration: 0.7, delay: i * 0.12, ease: [0.16, 1, 0.3, 1] }}
+              className="flex flex-col items-center text-center px-6 py-6 first:pl-0 last:pr-0 md:first:pl-0 md:last:pr-0"
             >
-              <p className="font-figtree text-4xl md:text-5xl font-bold bg-gradient-to-r from-[#6F00FF] via-[#C192FF] to-[#08BFFF] bg-clip-text text-transparent leading-none mb-2">
-                {stat.value}
+              <p className="font-manrope text-5xl md:text-6xl font-black text-[#226C3D] leading-none mb-2">
+                <CountUp value={stat.value} suffix={stat.suffix} />
               </p>
-              <p className="text-white/40 text-sm font-medium">{stat.label}</p>
+              <p className="text-[#9C8E7C] text-xs font-bold uppercase tracking-[0.15em]">{stat.label}</p>
             </motion.div>
           ))}
         </motion.div>

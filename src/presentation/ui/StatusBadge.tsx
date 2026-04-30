@@ -7,9 +7,9 @@ interface StatusBadgeProps {
 
 const config: Record<
   RegistrationStatus,
-  { label: string; variant: 'yellow' | 'green' | 'red' | 'blue' }
+  { label: string; variant: 'gold' | 'green' | 'red' | 'blue' }
 > = {
-  pending: { label: 'Pending Review', variant: 'yellow' },
+  pending: { label: 'Pending Review', variant: 'gold' },
   approved: { label: 'Approved', variant: 'green' },
   rejected: { label: 'Rejected', variant: 'red' },
   waitlisted: { label: 'Waitlisted', variant: 'blue' },

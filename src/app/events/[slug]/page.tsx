@@ -26,15 +26,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title: `${event.title} — ${formatDate(event.date)}`,
     description: event.description,
     openGraph: {
-      title: event.title,
+      title: `${event.title} | ${event.subtitle}`,
       description: event.description,
       type: 'website',
-      siteName: 'MTU Career Services',
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: event.title,
-      description: event.description,
+      images: [{ url: '/images/imagetwo.jpeg' }],
     },
   };
 }
@@ -51,7 +46,7 @@ export default async function EventPage({ params }: PageProps) {
   ]);
 
   return (
-    <div className="min-h-screen bg-[#040019] text-white">
+    <div className="min-h-screen bg-[#F2E4CC] text-[#1A1A1A] overflow-x-hidden">
       <Navbar event={event} />
       <main>
         <HeroSection event={event} />

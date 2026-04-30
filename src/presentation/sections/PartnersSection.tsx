@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { PartnerEntity } from '@/domain/types';
 import { fadeInUp, viewportConfig } from '@/lib/animations';
 import { PartnerLogoGrid } from '../ui/PartnerLogoGrid';
+import { WordReveal } from '../ui/WordReveal';
 
 interface PartnersSectionProps {
   partners: PartnerEntity[];
@@ -11,28 +12,21 @@ interface PartnersSectionProps {
 
 export function PartnersSection({ partners }: PartnersSectionProps) {
   return (
-    <section id="partners" className="py-24 md:py-32 bg-[rgba(111,0,255,0.03)]">
+    <section id="partners" className="py-24 md:py-32 bg-[#F2E4CC]">
       <div className="layout">
         <motion.div
           variants={fadeInUp}
           initial="hidden"
           whileInView="visible"
           viewport={viewportConfig}
-          className="text-center mb-16"
+          className="mb-16"
         >
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#C192FF] mb-4">
-            Our Partners
+          <p className="text-[#226C3D] text-xs font-bold uppercase tracking-[0.2em] mb-4">
+            Official Partners & Sponsors
           </p>
-          <h2 className="font-figtree text-4xl md:text-5xl font-bold text-white leading-tight mb-4">
-            Backed by{' '}
-            <span className="bg-gradient-to-r from-[#6F00FF] to-[#08BFFF] bg-clip-text text-transparent">
-              industry leaders
-            </span>
+          <h2 className="font-manrope text-4xl md:text-5xl lg:text-6xl font-black text-[#1A1A1A] leading-[1.02] tracking-tight max-w-2xl">
+            <WordReveal text="Backed by organisations that believe in you." />
           </h2>
-          <p className="text-white/40 text-base max-w-xl mx-auto">
-            Over 80 companies across tech, engineering, automotive, aerospace, and energy are actively
-            recruiting at this event.
-          </p>
         </motion.div>
 
         <PartnerLogoGrid partners={partners} />

@@ -3,6 +3,7 @@ import { heroui } from '@heroui/react';
 import defaultTheme from 'tailwindcss/defaultTheme';
 
 export default {
+  darkMode: 'class',
   content: [
     './src/**/*.{js,ts,jsx,tsx,mdx}',
     './node_modules/@heroui/react/**/*.js',
@@ -10,9 +11,11 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        primary: ['Inter', ...defaultTheme.fontFamily.sans],
-        figtree: ['var(--font-figtree)'],
-        inter: ['var(--font-inter)'],
+        manrope: ['Manrope', ...defaultTheme.fontFamily.sans],
+        heading: ['Manrope', ...defaultTheme.fontFamily.sans],
+        inter: ['var(--font-inter)', ...defaultTheme.fontFamily.sans],
+        body: ['var(--font-inter)', ...defaultTheme.fontFamily.sans],
+        figtree: ['Manrope', ...defaultTheme.fontFamily.sans],
       },
       colors: {
         primary: {

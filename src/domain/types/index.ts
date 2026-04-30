@@ -94,6 +94,12 @@ export interface RegistrationEntity {
   updatedAt?: string;
 }
 
+export interface StatItem {
+  label: string;
+  value: number;
+  suffix: string;
+}
+
 export interface RegistrationFormData {
   firstName: string;
   lastName: string;
