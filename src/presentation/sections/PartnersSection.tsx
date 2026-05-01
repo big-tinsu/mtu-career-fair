@@ -1,125 +1,153 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { PartnerEntity, PartnerTier } from '@/domain/types';
-import { fadeInUp, viewportConfig } from '@/lib/animations';
+import Image from 'next/image';
+import Link from 'next/link';
+import { FiArrowRight } from 'react-icons/fi';
+import { PartnerEntity } from '@/domain/types';
+import { viewportConfig } from '@/lib/animations';
 
 interface PartnersSectionProps {
   partners: PartnerEntity[];
 }
 
-const tierConfig: Record<PartnerTier, { label: string; sizeClass: string }> = {
-  platinum: { label: 'Platinum Partner', sizeClass: 'text-[13vw] md:text-[10vw] lg:text-[9vw]' },
-  gold:     { label: 'Gold Partners',    sizeClass: 'text-[8vw] md:text-[6vw] lg:text-[5.5vw]' },
-  silver:   { label: 'Silver Partners',  sizeClass: 'text-[5vw] md:text-[3.8vw] lg:text-[3.4vw]' },
-  media:    { label: 'Media Partners',   sizeClass: 'text-[3.5vw] md:text-[2.8vw] lg:text-[2.4vw]' },
-};
+// Alternating card background colours for the grid slots
+const CARD_BG = ['#F2E4CC', '#226C3D', '#1A5430', '#8B6914', '#F2E4CC', '#226C3D'];
 
-export function PartnersSection({ partners }: PartnersSectionProps) {
-  const tiers = (['platinum', 'gold', 'silver', 'media'] as PartnerTier[]).filter(tier =>
-    partners.some(p => p.tier === tier),
-  );
-
-  const allNames = partners.map(p => p.name);
+function PartnerCard({
+  partner,
+  idx,
+}: {
+  partner: PartnerEntity;
+  idx: number;
+}) {
+  const bg      = CARD_BG[idx % CARD_BG.length];
+  const isDark  = bg !== '#F2E4CC';
+  const border  = isDark ? '#1A1A1A' : '#C4B89E';
 
   return (
-    <section id="partners" className="bg-white overflow-hidden">
-      {/* Header */}
-      <div className="px-6 md:px-12 lg:px-20 xl:px-28 pt-24 md:pt-32 pb-16 md:pb-20">
-        <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={viewportConfig}>
-          <p className="text-[#226C3D] text-xs font-bold uppercase tracking-[0.25em] mb-5">
-            Official Partners & Sponsors
+    <motion.a
+      href={partner.website ?? '#'}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="relative group flex flex-col rounded-2xl overflow-hidden focus:outline-none"
+      style={{ backgroundColor: bg, minHeight: 200 }}
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={viewportConfig}
+      transition={{ duration: 0.6, delay: idx * 0.07, ease: [0.16, 1, 0.3, 1] }}
+      whileHover={{ scale: 1.02 }}
+    >
+      {/* Card border */}
+      <div
+        className="absolute inset-0 pointer-events-none z-10 rounded-2xl"
+        style={{ border: `2px solid ${border}` }}
+      />
+
+      {/* Logo or name */}
+      <div className="flex-1 flex items-center justify-center p-8">
+        {partner.logo ? (
+          <div className="relative w-full" style={{ height: 90 }}>
+            <Image
+              src={partner.logo}
+              alt={partner.name}
+              fill
+              className="object-contain transition-transform duration-500 group-hover:scale-[1.05]"
+            />
+          </div>
+        ) : (
+          <p
+            className="font-instrument italic text-center leading-tight"
+            style={{
+              fontSize: 'clamp(1.6rem, 3vw, 2.8rem)',
+              color: isDark ? '#F2E4CC' : '#1A1A1A',
+            }}
+          >
+            {partner.name}
           </p>
-          <h2
-            className="font-instrument italic text-[#1A1A1A] leading-[0.92]"
-            style={{ fontSize: 'clamp(2.8rem, 7vw, 7rem)' }}
-          >
-            Backed by those<br />who believe in you.
-          </h2>
-        </motion.div>
+        )}
       </div>
 
-      {/* Tier rows */}
-      {tiers.map((tier, tierIdx) => {
-        const { label, sizeClass } = tierConfig[tier];
-        const tierPartners = partners.filter(p => p.tier === tier);
-        const isEven = tierIdx % 2 === 0;
+      {/* Name badge */}
+      <div className="px-4 pb-5 flex justify-center z-10 relative">
+        <span
+          className="px-4 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-widest whitespace-nowrap shadow-sm"
+          style={{
+            backgroundColor: isDark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.08)',
+            color: isDark ? '#F2E4CC' : '#1A1A1A',
+          }}
+        >
+          {partner.description ?? partner.name}
+        </span>
+      </div>
+    </motion.a>
+  );
+}
 
-        return (
+export function PartnersSection({ partners }: PartnersSectionProps) {
+  // Show up to 6 partners in the grid; prioritise those with logos
+  const withLogo    = partners.filter(p => p.logo);
+  const withoutLogo = partners.filter(p => !p.logo);
+  const gridPartners = [...withLogo, ...withoutLogo].slice(0, 6);
+
+  return (
+    <section id="partners" className="bg-[#F2E4CC] overflow-hidden" style={{ paddingTop: 0, paddingBottom: 0 }}>
+      <div className="flex min-h-[70vh]">
+
+        {/* ── Left info panel ─────────────────────────── */}
+        <div
+          className="flex-shrink-0 flex flex-col justify-center border-r border-[#E0D1B5]"
+          style={{
+            width: 'clamp(260px, 30vw, 380px)',
+            padding: 'clamp(2.5rem, 5vw, 4.5rem)',
+          }}
+        >
           <motion.div
-            key={tier}
-            initial={{ opacity: 0, y: 32 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, x: -24 }}
+            whileInView={{ opacity: 1, x: 0 }}
             viewport={viewportConfig}
-            transition={{ duration: 0.65, delay: tierIdx * 0.08, ease: [0.16, 1, 0.3, 1] }}
-            className={`border-t border-[#E8D9BE] ${isEven ? 'bg-white' : 'bg-[#F2E4CC]/40'}`}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           >
-            <div className="px-6 md:px-12 lg:px-20 xl:px-28 py-8 md:py-10">
-              <p className="text-[#9C8E7C] text-[10px] font-bold uppercase tracking-[0.25em] mb-4">
-                {label}
-              </p>
-              <div className="flex flex-wrap items-baseline gap-x-6 gap-y-2">
-                {tierPartners.map((partner, i) => (
-                  <span key={partner.id}>
-                    <a
-                      href={partner.website ?? '#'}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={`font-instrument italic leading-none transition-opacity hover:opacity-60 ${sizeClass}`}
-                      style={{ color: partner.logoColor ?? '#1A1A1A' }}
-                    >
-                      {partner.name}
-                    </a>
-                    {i < tierPartners.length - 1 && (
-                      <span className="text-[#C4B89E] mx-2 text-2xl align-middle">·</span>
-                    )}
-                  </span>
-                ))}
-              </div>
-              {tierPartners[0]?.description && (
-                <p className="text-[#9C8E7C] text-xs mt-3">{tierPartners[0].description}</p>
-              )}
-            </div>
+            <p className="text-[#226C3D] text-[10px] font-bold uppercase tracking-[0.3em] mb-6">
+              Official Partners
+            </p>
+            <h2
+              className="font-instrument italic text-[#1A1A1A] leading-[0.88] mb-6"
+              style={{ fontSize: 'clamp(2rem, 3.8vw, 3.6rem)' }}
+            >
+              Backed by<br />those who<br />believe in you.
+            </h2>
+            <p className="text-[#5C5046] text-sm leading-relaxed mb-10">
+              Industry-leading organisations supporting the next generation of Nigerian professionals.
+            </p>
+            <Link href="register">
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="flex items-center gap-2.5 bg-[#226C3D] text-[#F2E4CC] font-bold text-sm px-6 py-3.5 rounded-full"
+              >
+                Register Free <FiArrowRight size={14} />
+              </motion.button>
+            </Link>
           </motion.div>
-        );
-      })}
+        </div>
 
-      {/* Scrolling marquee */}
-      <div className="border-t border-[#E8D9BE] bg-[#F2E4CC]/30 py-5 overflow-hidden">
+        {/* ── 2×3 Partner grid ────────────────────────── */}
         <div
-          className="flex whitespace-nowrap"
-          style={{ animation: 'marquee 22s linear infinite' }}
+          className="flex-1 grid gap-4"
+          style={{
+            gridTemplateColumns: 'repeat(3, 1fr)',
+            gridTemplateRows: 'repeat(2, 1fr)',
+            padding: 'clamp(1.5rem, 4vw, 3rem)',
+            alignContent: 'center',
+          }}
         >
-          {[...allNames, ...allNames, ...allNames, ...allNames].map((name, i) => (
-            <span
-              key={i}
-              className="flex-shrink-0 font-instrument italic text-3xl md:text-4xl text-[#1A1A1A]/15 mx-8"
-            >
-              {name}
-              <span className="mx-5 text-[#C4B89E]/50">·</span>
-            </span>
+          {gridPartners.map((partner, idx) => (
+            <PartnerCard key={partner.id} partner={partner} idx={idx} />
           ))}
         </div>
-      </div>
 
-      <div className="border-t border-[#E8D9BE] bg-white py-5 overflow-hidden">
-        <div
-          className="flex whitespace-nowrap"
-          style={{ animation: 'marquee-reverse 30s linear infinite' }}
-        >
-          {[...allNames, ...allNames, ...allNames, ...allNames].map((name, i) => (
-            <span
-              key={i}
-              className="flex-shrink-0 font-instrument italic text-3xl md:text-4xl text-[#226C3D]/10 mx-8"
-            >
-              {name}
-              <span className="mx-5 text-[#C4B89E]/30">·</span>
-            </span>
-          ))}
-        </div>
       </div>
-
-      <div className="pb-24 md:pb-32" />
     </section>
   );
 }

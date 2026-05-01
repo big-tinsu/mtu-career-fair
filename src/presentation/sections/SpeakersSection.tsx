@@ -30,7 +30,7 @@ const COLUMNS: { speakerIdx: number; styleIdx: number }[][] = [
   [{ speakerIdx: 0, styleIdx: 0 }, { speakerIdx: 2, styleIdx: 2 }], // col 1 — at top
   [{ speakerIdx: 1, styleIdx: 1 }, { speakerIdx: 4, styleIdx: 4 }], // col 2 — slight offset
 ];
-const COLUMN_TOPS = [260, 0, 110]; // vertical offset per column (px)
+const COLUMN_TOPS = [340, 40, 160]; // vertical offset per column (px)
 
 interface CardProps {
   speaker: SpeakerEntity;
@@ -132,7 +132,7 @@ export function SpeakersSection({ speakers }: SpeakersSectionProps) {
 
   return (
     <>
-      <section id="speakers" className="bg-[#F2E4CC]" style={{ paddingTop: 80, paddingBottom: 80, paddingLeft: 'clamp(1.5rem, 4vw, 3rem)', paddingRight: 'clamp(1.5rem, 4vw, 3rem)' }}>
+      <section id="speakers" className="bg-[#F2E4CC]" style={{ paddingTop: 120, paddingBottom: 140, paddingLeft: 'clamp(1.5rem, 4vw, 3rem)', paddingRight: 'clamp(1.5rem, 4vw, 3rem)' }}>
         <div className="flex gap-10 items-start" style={{ maxWidth: 1440, margin: '0 auto' }}>
 
           {/* ── Left info panel ─────────────────────────── */}
@@ -168,11 +168,11 @@ export function SpeakersSection({ speakers }: SpeakersSectionProps) {
           </motion.div>
 
           {/* ── Three-column masonry card grid ──────────── */}
-          <div className="flex-1 flex gap-6 items-start">
+          <div className="flex-1 flex gap-8 items-start" style={{ paddingTop: 24 }}>
             {COLUMNS.map((col, ci) => (
               <div
                 key={ci}
-                className="flex-1 flex flex-col gap-10"
+                className="flex-1 flex flex-col gap-16"
                 style={{ paddingTop: COLUMN_TOPS[ci] }}
               >
                 {col.map(({ speakerIdx, styleIdx }, ri) => {

@@ -1,237 +1,190 @@
 'use client';
 
-import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
+import { motion, useScroll, useTransform, MotionValue } from 'framer-motion';
 
-const quotes = [
+// ─── Data ────────────────────────────────────────────────────────────────────
+
+const CARDS = [
   {
-    text: 'AURA Career Fair completely changed how I approached my job search. Landed 3 interviews within a week.',
     name: 'Chisom Adaeze',
-    handle: '@chisomwrites',
-    dept: 'Mass Communication',
+    username: '@chisomwrites',
     initials: 'CA',
-    accent: '#226C3D',
-    rot: -7,
-    from: { x: -260, y: -180, rotate: -22, opacity: 0 },
+    color: '#226C3D',
+    text: 'AURA Career Fair completely changed how I approached my job search. Landed 3 interviews within a week of attending. Best event of 2026 🔥',
   },
   {
-    text: 'The CV clinic rewrote my entire summary in 5 minutes. My callback rate went from 0 to 4 in a month.',
     name: 'Tunde Afolabi',
-    handle: '@tunde_builds',
-    dept: 'Computer Science',
+    username: '@tunde_builds',
     initials: 'TA',
-    accent: '#8B6914',
-    rot: 6,
-    from: { x: 280, y: -120, rotate: 24, opacity: 0 },
+    color: '#8B6914',
+    text: 'The CV clinic was INSANE. A recruiter rewrote my entire summary in 5 minutes — my callback rate tripled after. 100% recommend 🚀',
   },
   {
-    text: 'I shook hands with 4 company reps and walked away with an internship offer. No cap.',
     name: 'Blessing Eze',
-    handle: '@blessingeze_',
-    dept: 'Business Administration',
+    username: '@blessingeze_',
     initials: 'BE',
-    accent: '#1A5430',
-    rot: -4,
-    from: { x: -180, y: 220, rotate: -18, opacity: 0 },
+    color: '#1A5430',
+    text: 'Shook hands with 4 company reps at AURA and walked away with an internship offer the same day. No cap 💼',
   },
   {
-    text: "The panel talk alone was worth more than a semester of lectures. These speakers are the real deal.",
     name: 'Emeka Okafor',
-    handle: '@emekacodes',
-    dept: 'Engineering',
+    username: '@emekacodes',
     initials: 'EO',
-    accent: '#226C3D',
-    rot: 10,
-    from: { x: 300, y: 160, rotate: 30, opacity: 0 },
+    color: '#226C3D',
+    text: 'The panel talk was worth more than a full semester of lectures. MTU really cooked with this one 🎯',
   },
   {
-    text: "I've been to career fairs before. AURA is on a completely different level. Don't miss this.",
     name: 'Fadeke Adesanya',
-    handle: '@fadeketalks',
-    dept: 'Law',
+    username: '@fadeketalks',
     initials: 'FA',
-    accent: '#C9A227',
-    rot: -9,
-    from: { x: -60, y: 260, rotate: -28, opacity: 0 },
-  },
-  {
-    text: 'The networking lunch was everything. Left with 12 LinkedIn connections including two CEOs.',
-    name: 'Kemi Badmus',
-    handle: '@kemibadmus',
-    dept: 'Economics',
-    initials: 'KB',
-    accent: '#4A7C3F',
-    rot: 5,
-    from: { x: 200, y: -240, rotate: 20, opacity: 0 },
+    color: '#4A7C3F',
+    text: "Been to career fairs before. AURA is on a completely different level — the energy, the connections, the speakers. Don't sleep ✨",
   },
 ];
 
-function Card({ q, i }: { q: typeof quotes[0]; i: number }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [hovered, setHovered] = useState(false);
+const N = CARDS.length;
 
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const rotX = useSpring(useTransform(y, [-60, 60], [8, -8]), { stiffness: 400, damping: 30 });
-  const rotY = useSpring(useTransform(x, [-60, 60], [-8, 8]), { stiffness: 400, damping: 30 });
+// ─── Card component ───────────────────────────────────────────────────────────
 
-  function onMouseMove(e: React.MouseEvent<HTMLDivElement>) {
-    const rect = ref.current?.getBoundingClientRect();
-    if (!rect) return;
-    x.set(e.clientX - rect.left - rect.width / 2);
-    y.set(e.clientY - rect.top - rect.height / 2);
-  }
-  function onMouseLeave() {
-    x.set(0);
-    y.set(0);
-    setHovered(false);
-  }
+interface CardProps {
+  card: (typeof CARDS)[0];
+  i: number;
+  progress: MotionValue<number>; // parent scroll progress
+  range: [number, number];       // when THIS card should start shrinking → full shrink
+  targetScale: number;           // how small this card becomes when fully stacked under
+}
+
+function TestimonialCard({ card, i, progress, range, targetScale }: CardProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Per-card scroll — used for the inner parallax (quote text subtle shift)
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start end', 'start start'],
+  });
+
+  // Subtle vertical shift on the inner content as this card scrolls in
+  const innerY = useTransform(scrollYProgress, [0, 1], ['-10%', '0%']);
+
+  // ← KEY: scale driven by the PARENT's scroll progress, not this card's own scroll
+  // This is what makes earlier cards "shrink back" as new cards stack on top
+  const scale = useTransform(progress, range, [1, targetScale]);
 
   return (
-    <motion.div
-      ref={ref}
-      initial={q.from}
-      whileInView={{ x: 0, y: 0, rotate: q.rot, opacity: 1 }}
-      viewport={{ once: true, amount: 0.1 }}
-      transition={{
-        duration: 1.1,
-        delay: i * 0.08,
-        ease: [0.16, 1, 0.3, 1],
-        opacity: { duration: 0.4 },
-      }}
-      style={{ rotateX: rotX, rotateY: rotY, transformStyle: 'preserve-3d' }}
-      whileHover={{ rotate: 0, scale: 1.06, zIndex: 20 }}
-      onMouseMove={onMouseMove}
-      onMouseLeave={onMouseLeave}
-      onMouseEnter={() => setHovered(true)}
-      className="relative bg-white rounded-2xl p-6 shadow-xl cursor-default select-none"
+    // Each card is a full-viewport sticky container.
+    // CSS sticky + DOM order is what creates the actual stacking —
+    // later cards sit on top of earlier ones as you scroll.
+    <div
+      ref={containerRef}
+      className="h-screen sticky top-0 flex items-center justify-center"
+      style={{ backgroundColor: '#F5EFE3' }}
     >
-      {/* Top accent bar */}
-      <div className="h-1 w-10 rounded-full mb-5" style={{ backgroundColor: q.accent }} />
-
-      {/* Quote */}
-      <p className="text-[#1A1A1A] text-sm leading-relaxed mb-6 font-medium">
-        &ldquo;{q.text}&rdquo;
-      </p>
-
-      {/* Author row */}
-      <div className="flex items-center gap-3">
-        <div
-          className="w-9 h-9 rounded-full flex items-center justify-center text-white text-[11px] font-bold flex-shrink-0"
-          style={{ backgroundColor: q.accent }}
-        >
-          {q.initials}
-        </div>
-        <div>
-          <p className="text-[#1A1A1A] text-[13px] font-bold leading-none mb-0.5">{q.name}</p>
-          <p className="text-[#9C8E7C] text-[11px]">{q.dept}</p>
-        </div>
-        <div className="ml-auto">
-          <span className="text-[10px] font-bold uppercase tracking-widest text-[#9C8E7C]">
-            {q.handle}
-          </span>
-        </div>
-      </div>
-
-      {/* Corner quote mark */}
-      <div
-        className="absolute top-4 right-5 font-instrument italic leading-none opacity-10 select-none pointer-events-none"
-        style={{ fontSize: 64, color: q.accent }}
+      <motion.div
+        style={{
+          scale,
+          // Matches reference: earlier cards sit slightly higher so later
+          // cards can stack visually beneath their top edge
+          top: `calc(-5vh + ${i * 25}px)`,
+          // CRITICAL — scales from the top edge so the card appears to
+          // be pushed back rather than shrinking toward its center
+          transformOrigin: 'top',
+          position: 'relative',
+          backgroundColor: '#FFFFFF',
+          width: 'min(90vw, 680px)',
+          borderRadius: 24,
+          boxShadow: '0 8px 48px rgba(0,0,0,0.12)',
+          overflow: 'hidden',
+        }}
       >
-        &ldquo;
-      </div>
-
-      {/* Hovered glow ring */}
-      {hovered && (
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="absolute inset-0 rounded-2xl pointer-events-none"
-          style={{ boxShadow: `0 0 0 2px ${q.accent}40, 0 24px 48px ${q.accent}25` }}
-        />
-      )}
-    </motion.div>
+          style={{ y: innerY }}
+          className="p-8 md:p-10 flex flex-col gap-5"
+        >
+          {/* Header */}
+          <div className="flex items-center gap-3">
+            <div
+              className="w-11 h-11 rounded-full flex-shrink-0 flex items-center justify-center text-white font-bold text-sm"
+              style={{ backgroundColor: card.color }}
+            >
+              {card.initials}
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="font-bold text-[#1A1A1A] text-[15px] leading-none mb-0.5 truncate">
+                {card.name}
+              </p>
+              <p className="text-[#9C8E7C] text-[13px] truncate">{card.username}</p>
+            </div>
+            {/* X / Twitter icon */}
+            <svg
+              width="18" height="18" viewBox="0 0 24 24" fill="currentColor"
+              className="flex-shrink-0 opacity-50 text-[#1A1A1A]"
+              aria-hidden
+            >
+              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.263 5.633L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z" />
+            </svg>
+          </div>
+
+          {/* Quote */}
+          <p
+            className="text-[#1A1A1A] leading-relaxed"
+            style={{ fontSize: 'clamp(1rem, 1.6vw, 1.15rem)' }}
+          >
+            {card.text}
+          </p>
+
+          {/* Footer */}
+          <div className="pt-4 border-t border-[#EDE3D3] flex items-center justify-between">
+            <p className="text-[#9C8E7C] text-[12px] font-medium">AURA Career Fair 2026</p>
+            <span className="text-[11px] font-bold text-[#C4B89E] tabular-nums">
+              {String(i + 1).padStart(2, '0')} / {String(N).padStart(2, '0')}
+            </span>
+          </div>
+        </motion.div>
+      </motion.div>
+    </div>
   );
 }
 
+// ─── Section ──────────────────────────────────────────────────────────────────
+
 export function TestimonialsSection() {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Parent container tracks its OWN full scroll range.
+  // This single MotionValue is shared with every card.
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start start', 'end end'],
+  });
+
   return (
-    <section className="relative bg-[#1A1A1A] overflow-hidden py-28">
+    // marginTop/Bottom create the scroll space so sticky cards have room to work.
+    // Without enough margin, the sticky elements never get a chance to stack.
+    <div
+      ref={containerRef}
+      style={{ marginTop: '50vh', marginBottom: '50vh' }}
+    >
+      {CARDS.map((card, i) => {
+        // Earlier cards shrink more (pushed further back by the stack)
+        const targetScale = 1 - (N - i) * 0.05;
 
-      {/* Giant ghost watermark */}
-      <div
-        className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden"
-        aria-hidden
-      >
-        <motion.p
-          initial={{ opacity: 0, scale: 0.9 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1.4, ease: 'easeOut' }}
-          className="font-instrument italic text-white whitespace-nowrap"
-          style={{ fontSize: 'clamp(5rem, 18vw, 18rem)', opacity: 0.04, lineHeight: 1 }}
-        >
-          Beyond
-        </motion.p>
-      </div>
+        // range: when scroll progress crosses i/N * 0.8, this card starts shrinking
+        // It finishes shrinking at progress = 1 (fully stacked)
+        const rangeStart = i * (1 / N);
+        const range: [number, number] = [rangeStart, 1];
 
-      {/* Floating noise texture overlay */}
-      <div
-        className="absolute inset-0 pointer-events-none opacity-[0.03]"
-        style={{
-          backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'n\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23n)\'/%3E%3C/svg%3E")',
-          backgroundRepeat: 'repeat',
-          backgroundSize: '200px',
-        }}
-      />
-
-      <div className="relative z-10 max-w-7xl mx-auto px-8">
-
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.5 }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="mb-20"
-        >
-          <p className="text-[#226C3D] text-[10px] font-bold uppercase tracking-[0.3em] mb-4">
-            Attendee Stories
-          </p>
-          <h2
-            className="font-instrument italic text-white leading-[0.88]"
-            style={{ fontSize: 'clamp(2.8rem, 6vw, 5.5rem)' }}
-          >
-            Real People.<br />
-            <span style={{ color: '#C9A227' }}>Real Impact.</span>
-          </h2>
-        </motion.div>
-
-        {/* Cards — masonry-style 3 columns, perspective container */}
-        <div
-          className="grid gap-6"
-          style={{
-            perspective: 1200,
-            gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-          }}
-        >
-          {quotes.map((q, i) => (
-            <Card key={q.name} q={q} i={i} />
-          ))}
-        </div>
-
-        {/* Bottom CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.8 }}
-          transition={{ duration: 0.7, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-          className="mt-20 text-center"
-        >
-          <p className="text-[#9C8E7C] text-sm mb-2">Join hundreds of students who already registered</p>
-          <p className="font-instrument italic text-white/30 text-lg">May 11, 2026 · MTU Multi-Purpose Hall</p>
-        </motion.div>
-      </div>
-    </section>
+        return (
+          <TestimonialCard
+            key={card.username}
+            card={card}
+            i={i}
+            progress={scrollYProgress}
+            range={range}
+            targetScale={targetScale}
+          />
+        );
+      })}
+    </div>
   );
 }

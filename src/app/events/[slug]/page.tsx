@@ -11,7 +11,7 @@ import { ExpectSection } from '@/presentation/sections/ExpectSection';
 import { SpeakersSection } from '@/presentation/sections/SpeakersSection';
 import { TestimonialsSection } from '@/presentation/sections/TestimonialsSection';
 import { PartnersSection } from '@/presentation/sections/PartnersSection';
-import { RegistrationCTASection } from '@/presentation/sections/RegistrationCTASection';
+// import { RegistrationCTASection } from '@/presentation/sections/RegistrationCTASection';
 import { eventStats } from '@/constants/eventData';
 
 interface PageProps {
@@ -46,7 +46,7 @@ export default async function EventPage({ params }: PageProps) {
   ]);
 
   return (
-    <div className="min-h-screen bg-[#F2E4CC] text-[#1A1A1A] overflow-x-hidden">
+    <div className="min-h-screen bg-[#F2E4CC] text-[#1A1A1A]">
       <Navbar event={event} />
       <main>
         <HeroSection event={event} />
@@ -56,7 +56,7 @@ export default async function EventPage({ params }: PageProps) {
         <SpeakersSection speakers={speakers} />
         <TestimonialsSection />
         <PartnersSection partners={partners} />
-        <RegistrationCTASection event={event} />
+        {/* <RegistrationCTASection event={event} /> */}
       </main>
       <Footer event={event} />
     </div>
