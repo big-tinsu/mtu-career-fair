@@ -44,6 +44,7 @@ export const mockSpeakers: SpeakerEntity[] = [
     company: 'Glory Ministries International',
     bio: 'A visionary leader dedicated to empowering the next generation to discover purpose beyond the classroom. Known for his transformational teachings on faith, career, and excellence.',
     type: 'panelist',
+    photo: '/images/speaker.jpeg',
     tags: ['Leadership', 'Purpose', 'Mentorship'],
   },
   {

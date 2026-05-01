@@ -11,11 +11,12 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        manrope: ['Manrope', ...defaultTheme.fontFamily.sans],
-        heading: ['Manrope', ...defaultTheme.fontFamily.sans],
+        instrument: ['Instrument Serif', 'Georgia', 'serif'],
+        heading: ['Instrument Serif', 'Georgia', 'serif'],
+        manrope: ['var(--font-inter)', ...defaultTheme.fontFamily.sans],
         inter: ['var(--font-inter)', ...defaultTheme.fontFamily.sans],
         body: ['var(--font-inter)', ...defaultTheme.fontFamily.sans],
-        figtree: ['Manrope', ...defaultTheme.fontFamily.sans],
+        figtree: ['var(--font-inter)', ...defaultTheme.fontFamily.sans],
       },
       colors: {
         primary: {

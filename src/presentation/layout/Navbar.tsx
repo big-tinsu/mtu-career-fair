@@ -16,7 +16,6 @@ const navLinks = [
   { label: 'About', href: '#about' },
   { label: 'Speakers', href: '#speakers' },
   { label: 'Partners', href: '#partners' },
-  { label: 'Agenda', href: '#agenda' },
 ];
 
 function scrollTo(id: string) {
@@ -52,10 +51,18 @@ export function Navbar({ event }: NavbarProps) {
               A
             </div>
             <div className="hidden sm:block">
-              <span className="text-[#1A1A1A] font-bold text-sm font-manrope leading-tight block group-hover:text-[#226C3D] transition-colors">
+              <span className={cn(
+                'font-bold text-sm leading-tight block transition-colors',
+                scrolled ? 'text-[#1A1A1A] group-hover:text-[#226C3D]' : 'text-[#F2E4CC]/90 group-hover:text-white',
+              )}>
                 AURA Career Fair
               </span>
-              <span className="text-[#9C8E7C] text-[10px] leading-none">Mountain Top University</span>
+              <span className={cn(
+                'text-[10px] leading-none transition-colors',
+                scrolled ? 'text-[#9C8E7C]' : 'text-[#F2E4CC]/50',
+              )}>
+                Mountain Top University
+              </span>
             </div>
           </Link>
 
@@ -64,7 +71,12 @@ export function Navbar({ event }: NavbarProps) {
               <button
                 key={link.href}
                 onClick={() => scrollTo(link.href)}
-                className="px-4 py-2 text-sm text-[#5C5046] hover:text-[#226C3D] rounded-xl hover:bg-[rgba(34,108,61,0.06)] transition-all duration-150 cursor-pointer font-medium"
+                className={cn(
+                  'px-4 py-2 text-sm rounded-xl transition-all duration-150 cursor-pointer font-medium',
+                  scrolled
+                    ? 'text-[#5C5046] hover:text-[#226C3D] hover:bg-[rgba(34,108,61,0.06)]'
+                    : 'text-[#F2E4CC]/60 hover:text-[#F2E4CC] hover:bg-[rgba(255,255,255,0.08)]',
+                )}
               >
                 {link.label}
               </button>
@@ -73,11 +85,16 @@ export function Navbar({ event }: NavbarProps) {
 
           <div className="flex items-center gap-3">
             <Link href={`/events/${event.slug}/register`}>
-              <Button size="sm">Register Free</Button>
+              <Button size="sm" variant={scrolled ? 'primary' : 'white'}>Register Free</Button>
             </Link>
             <button
               onClick={() => setMenuOpen((v) => !v)}
-              className="md:hidden w-9 h-9 flex items-center justify-center rounded-xl border border-[#E0D1B5] text-[#5C5046] hover:text-[#226C3D] hover:bg-[rgba(34,108,61,0.06)] transition-all"
+              className={cn(
+                'md:hidden w-9 h-9 flex items-center justify-center rounded-xl border transition-all',
+                scrolled
+                  ? 'border-[#E0D1B5] text-[#5C5046] hover:text-[#226C3D] hover:bg-[rgba(34,108,61,0.06)]'
+                  : 'border-[#F2E4CC]/20 text-[#F2E4CC]/70 hover:text-[#F2E4CC] hover:bg-[rgba(255,255,255,0.08)]',
+              )}
             >
               {menuOpen ? <FiX size={18} /> : <FiMenu size={18} />}
             </button>

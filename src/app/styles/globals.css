@@ -33,15 +33,15 @@
 
   h1, .h1 {
     @apply font-black text-3xl md:text-5xl text-[#1A1A1A] leading-tight tracking-tight;
-    font-family: 'Manrope', system-ui, sans-serif;
+    font-family: 'Instrument Serif', Georgia, serif;
   }
   h2, .h2 {
     @apply font-black text-2xl md:text-4xl text-[#1A1A1A] leading-tight tracking-tight;
-    font-family: 'Manrope', system-ui, sans-serif;
+    font-family: 'Instrument Serif', Georgia, serif;
   }
   h3, .h3 {
     @apply font-bold text-xl md:text-2xl text-[#1A1A1A];
-    font-family: 'Manrope', system-ui, sans-serif;
+    font-family: 'Instrument Serif', Georgia, serif;
   }
 
   .layout {

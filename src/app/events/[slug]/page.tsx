@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { fetchAgenda, fetchEventBySlug, fetchPartners, fetchSpeakers } from '@/infrastructure/api/eventApi';
+import { fetchEventBySlug, fetchPartners, fetchSpeakers } from '@/infrastructure/api/eventApi';
 import { formatDate } from '@/lib/utils';
 import { Navbar } from '@/presentation/layout/Navbar';
 import { Footer } from '@/presentation/layout/Footer';
@@ -9,7 +9,6 @@ import { StatsSection } from '@/presentation/sections/StatsSection';
 import { AboutSection } from '@/presentation/sections/AboutSection';
 import { SpeakersSection } from '@/presentation/sections/SpeakersSection';
 import { PartnersSection } from '@/presentation/sections/PartnersSection';
-import { AgendaSection } from '@/presentation/sections/AgendaSection';
 import { RegistrationCTASection } from '@/presentation/sections/RegistrationCTASection';
 import { eventStats } from '@/constants/eventData';
 
@@ -39,10 +38,9 @@ export default async function EventPage({ params }: PageProps) {
   const event = await fetchEventBySlug(slug);
   if (!event) notFound();
 
-  const [speakers, partners, agenda] = await Promise.all([
+  const [speakers, partners] = await Promise.all([
     fetchSpeakers(event.id),
     fetchPartners(event.id),
-    fetchAgenda(event.id),
   ]);
 
   return (
@@ -54,7 +52,6 @@ export default async function EventPage({ params }: PageProps) {
         <AboutSection event={event} />
         <SpeakersSection speakers={speakers} />
         <PartnersSection partners={partners} />
-        <AgendaSection items={agenda} />
         <RegistrationCTASection event={event} />
       </main>
       <Footer event={event} />
