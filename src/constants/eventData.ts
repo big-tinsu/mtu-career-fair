@@ -70,6 +70,17 @@ export const mockSpeakers: SpeakerEntity[] = [
     tags: ['Technology', 'Startups', 'Innovation'],
   },
   {
+    id: 'spk-005',
+    name: 'Temitope Adeyemi',
+    title: 'Human Resources Director',
+    company: 'Workforce Africa',
+    bio: 'Temitope is a renowned HR leader who has shaped talent acquisition strategies across multinational companies in Africa. She offers sharp, practical guidance on standing out in a competitive job market.',
+    type: 'panelist',
+    photo: '/images/speakers/speaker5.jpg',
+    linkedIn: '#',
+    tags: ['HR', 'Talent', 'Career Growth'],
+  },
+  {
     id: 'spk-004',
     name: 'Omodolapo Ajaguma',
     title: 'Corporate Executive & Coach',

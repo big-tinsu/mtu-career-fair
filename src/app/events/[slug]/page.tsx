@@ -7,7 +7,9 @@ import { Footer } from '@/presentation/layout/Footer';
 import { HeroSection } from '@/presentation/sections/HeroSection';
 import { StatsSection } from '@/presentation/sections/StatsSection';
 import { AboutSection } from '@/presentation/sections/AboutSection';
+import { ExpectSection } from '@/presentation/sections/ExpectSection';
 import { SpeakersSection } from '@/presentation/sections/SpeakersSection';
+import { TestimonialsSection } from '@/presentation/sections/TestimonialsSection';
 import { PartnersSection } from '@/presentation/sections/PartnersSection';
 import { RegistrationCTASection } from '@/presentation/sections/RegistrationCTASection';
 import { eventStats } from '@/constants/eventData';
@@ -50,7 +52,9 @@ export default async function EventPage({ params }: PageProps) {
         <HeroSection event={event} />
         <StatsSection stats={eventStats} />
         <AboutSection event={event} />
+        <ExpectSection />
         <SpeakersSection speakers={speakers} />
+        <TestimonialsSection />
         <PartnersSection partners={partners} />
         <RegistrationCTASection event={event} />
       </main>

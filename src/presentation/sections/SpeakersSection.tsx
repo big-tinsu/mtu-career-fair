@@ -3,8 +3,10 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
+import Link from 'next/link';
+import { FiArrowRight } from 'react-icons/fi';
 import { SpeakerEntity } from '@/domain/types';
-import { fadeInUp, viewportConfig } from '@/lib/animations';
+import { viewportConfig } from '@/lib/animations';
 import { SpeakerPanel } from '../ui/SpeakerPanel';
 import { getInitials } from '@/lib/utils';
 
@@ -12,63 +14,77 @@ interface SpeakersSectionProps {
   speakers: SpeakerEntity[];
 }
 
-/* Per-speaker card config: background, badge colors, photo height */
 const cardStyles = [
-  { bg: '#226C3D', photoH: 420, badgeBg: '#F2E4CC',  badgeText: '#1A5430' },
-  { bg: '#F2E4CC', photoH: 520, badgeBg: '#226C3D',  badgeText: '#F2E4CC' },
-  { bg: '#1A5430', photoH: 520, badgeBg: '#F2E4CC',  badgeText: '#1A5430' },
-  { bg: '#8B6914', photoH: 420, badgeBg: '#F2E4CC',  badgeText: '#8B6914' },
+  { bg: '#226C3D', photoH: 400, badgeBg: '#F2E4CC', badgeText: '#1A5430' },
+  { bg: '#F2E4CC', photoH: 340, badgeBg: '#226C3D', badgeText: '#F2E4CC' },
+  { bg: '#1A5430', photoH: 460, badgeBg: '#F2E4CC', badgeText: '#1A5430' },
+  { bg: '#8B6914', photoH: 380, badgeBg: '#F2E4CC', badgeText: '#8B6914' },
+  { bg: '#226C3D', photoH: 420, badgeBg: '#F2E4CC', badgeText: '#1A5430' },
 ];
 
-/* ── Corner selection handles (Figma-aesthetic) ─────────── */
-function CornerHandles({ color }: { color: string }) {
-  const BORDER = color === '#F2E4CC' ? '#1A1A1A' : '#1A1A1A';
-  const BG     = color === '#F2E4CC' ? 'white'   : 'white';
-  const pos = ['-top-1.5 -left-1.5', '-top-1.5 -right-1.5', '-bottom-1.5 -left-1.5', '-bottom-1.5 -right-1.5'];
-  return (
-    <>
-      {pos.map((cls, i) => (
-        <div
-          key={i}
-          className={`absolute ${cls} w-3.5 h-3.5 z-30 pointer-events-none`}
-          style={{ backgroundColor: BG, border: `2px solid ${BORDER}` }}
-        />
-      ))}
-      <div className="absolute inset-0 z-10 pointer-events-none" style={{ border: `2px solid ${BORDER}` }} />
-    </>
-  );
-}
+const cornerPos = ['-top-2 -left-2', '-top-2 -right-2', '-bottom-2 -left-2', '-bottom-2 -right-2'] as const;
+
+/* Which speakers go in each column, and global style index */
+const COLUMNS: { speakerIdx: number; styleIdx: number }[][] = [
+  [{ speakerIdx: 3, styleIdx: 3 }],                               // col 0 — pushed down
+  [{ speakerIdx: 0, styleIdx: 0 }, { speakerIdx: 2, styleIdx: 2 }], // col 1 — at top
+  [{ speakerIdx: 1, styleIdx: 1 }, { speakerIdx: 4, styleIdx: 4 }], // col 2 — slight offset
+];
+const COLUMN_TOPS = [260, 0, 110]; // vertical offset per column (px)
 
 interface CardProps {
   speaker: SpeakerEntity;
-  idx: number;
+  styleIdx: number;
+  colIdx: number;
+  rowIdx: number;
   onClick: () => void;
 }
 
-function SpeakerCard({ speaker, idx, onClick }: CardProps) {
-  const { bg, photoH, badgeBg, badgeText } = cardStyles[idx % cardStyles.length];
-  const tag = speaker.tags?.[0] ?? 'Panelist';
+function SpeakerCard({ speaker, styleIdx, colIdx, rowIdx, onClick }: CardProps) {
+  const style  = cardStyles[styleIdx % cardStyles.length];
+  const isDark = style.bg !== '#F2E4CC';
+  const border = isDark ? '#1A1A1A' : '#C4B89E';
+  const tag    = speaker.tags?.[0] ?? 'Panelist';
 
   return (
     <motion.div
-      variants={fadeInUp}
-      className="flex-shrink-0 flex flex-col"
-      style={{ width: 290 }}
+      className="flex flex-col"
+      initial={{ opacity: 0, y: 60 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={viewportConfig}
+      transition={{
+        duration: 0.7,
+        delay: colIdx * 0.1 + rowIdx * 0.12,
+        ease: [0.16, 1, 0.3, 1],
+      }}
     >
-      {/* ── Photo card (variable height) ─────────────── */}
+      {/* Figma-style card: category tag + corner handles + photo */}
       <button
         onClick={onClick}
-        className="relative w-full group focus:outline-none"
-        style={{ height: photoH, backgroundColor: bg }}
+        className="relative group focus:outline-none w-full flex-shrink-0"
+        style={{ height: style.photoH, backgroundColor: style.bg }}
       >
-        <CornerHandles color={bg} />
-
-        {/* Floating category pill — above the photo */}
-        <div className="absolute -top-5 left-1/2 -translate-x-1/2 z-20 whitespace-nowrap">
-          <span className="block bg-white border border-[#E0D1B5] shadow-sm px-4 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-wider text-[#1A1A1A]">
+        {/* Category tag — centered above the top border */}
+        <div className="absolute -top-5 left-1/2 -translate-x-1/2 z-30 pointer-events-none">
+          <span className="bg-white border border-[#D0C8B8] shadow-sm px-4 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-widest text-[#1A1A1A] whitespace-nowrap">
             {tag}
           </span>
         </div>
+
+        {/* Card border */}
+        <div
+          className="absolute inset-0 pointer-events-none z-10"
+          style={{ border: `2px solid ${border}` }}
+        />
+
+        {/* Corner handles */}
+        {cornerPos.map((cls) => (
+          <div
+            key={cls}
+            className={`absolute ${cls} w-4 h-4 pointer-events-none z-20`}
+            style={{ backgroundColor: 'white', border: `2px solid ${border}` }}
+          />
+        ))}
 
         {/* Photo */}
         <div className="absolute inset-0 overflow-hidden">
@@ -77,7 +93,7 @@ function SpeakerCard({ speaker, idx, onClick }: CardProps) {
               src={speaker.photo}
               alt={speaker.name}
               fill
-              className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
+              className="object-cover object-top transition-transform duration-700 group-hover:scale-[1.04]"
             />
           ) : (
             <div
@@ -87,29 +103,25 @@ function SpeakerCard({ speaker, idx, onClick }: CardProps) {
               {getInitials(speaker.name)}
             </div>
           )}
-          {/* Hover tint */}
           <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 z-10" />
         </div>
 
-        {/* Name badge — bottom left */}
+        {/* Name badge */}
         <div className="absolute bottom-4 left-4 z-20">
           <span
             className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[12px] font-bold shadow-md"
-            style={{ backgroundColor: badgeBg, color: badgeText }}
+            style={{ backgroundColor: style.badgeBg, color: style.badgeText }}
           >
-            <span style={{ fontSize: 8, opacity: 0.7 }}>▶</span>
+            <span style={{ fontSize: 8, opacity: 0.65 }}>▶</span>
             {speaker.name}
           </span>
         </div>
       </button>
 
-      {/* ── Bio box below card ────────────────────────── */}
+      {/* Bio text */}
       <div className="mt-5 px-0.5">
-        <p className="text-[#1A1A1A] text-sm font-bold mb-1.5 leading-snug">{speaker.title}</p>
-        <p className="text-[#226C3D] text-xs font-semibold mb-2">{speaker.company}</p>
-        <p className="text-[#5C5046] text-sm leading-relaxed">
-          {speaker.bio}
-        </p>
+        <p className="text-[#1A1A1A] font-semibold text-[13px] leading-snug mb-1">{speaker.name}</p>
+        <p className="text-[#5C5046] text-[12px] leading-relaxed">{speaker.bio}</p>
       </div>
     </motion.div>
   );
@@ -120,59 +132,68 @@ export function SpeakersSection({ speakers }: SpeakersSectionProps) {
 
   return (
     <>
-      <section id="speakers" className="pt-24 md:pt-32 pb-28 md:pb-36 bg-[#F2E4CC] overflow-hidden">
+      <section id="speakers" className="bg-[#F2E4CC]" style={{ paddingTop: 80, paddingBottom: 80, paddingLeft: 'clamp(1.5rem, 4vw, 3rem)', paddingRight: 'clamp(1.5rem, 4vw, 3rem)' }}>
+        <div className="flex gap-10 items-start" style={{ maxWidth: 1440, margin: '0 auto' }}>
 
-        {/* ── Section header ──────────────────────────── */}
-        <div className="px-6 md:px-12 lg:px-20 xl:px-28 mb-20">
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
-            <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={viewportConfig}>
-              <p className="text-[#226C3D] text-xs font-bold uppercase tracking-[0.25em] mb-5">
-                The Panelists
-              </p>
-              <h2
-                className="font-instrument italic text-[#1A1A1A] leading-[0.9]"
-                style={{ fontSize: 'clamp(2.8rem, 6.5vw, 6.5rem)' }}
-              >
-                Voices that<br />walked the path.
-              </h2>
-            </motion.div>
-
-            <motion.p
-              variants={fadeInUp}
-              initial="hidden"
-              whileInView="visible"
-              viewport={viewportConfig}
-              className="text-[#5C5046] text-sm max-w-xs leading-relaxed md:text-right flex-shrink-0"
+          {/* ── Left info panel ─────────────────────────── */}
+          <motion.div
+            className="flex-shrink-0 flex flex-col justify-start"
+            style={{ width: 'clamp(200px, 22vw, 280px)', paddingTop: 40 }}
+            initial={{ opacity: 0, x: -32 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={viewportConfig}
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <p className="text-[#226C3D] text-[10px] font-bold uppercase tracking-[0.28em] mb-5">
+              The Panelists
+            </p>
+            <h2
+              className="font-instrument italic text-[#1A1A1A] leading-[0.88] mb-5"
+              style={{ fontSize: 'clamp(2rem, 3.5vw, 3.2rem)' }}
             >
-              Industry leaders, entrepreneurs, and executives sharing real career paths.
-              <br />
-              <span className="text-[#226C3D] font-medium">Click any card to read their story.</span>
-            </motion.p>
-          </div>
-        </div>
+              Our 2026<br />Speaker<br />Lineup
+            </h2>
+            <p className="text-[#5C5046] text-sm leading-relaxed mb-8">
+              Industry leaders, entrepreneurs, and executives sharing real stories from the frontlines of career success.
+            </p>
+            <Link href="register">
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="flex items-center gap-2.5 bg-[#226C3D] text-[#F2E4CC] font-bold text-sm px-6 py-3.5 rounded-full"
+              >
+                Register Free <FiArrowRight size={14} />
+              </motion.button>
+            </Link>
+          </motion.div>
 
-        {/* ── Cards — horizontal scroll, bottom-aligned ─ */}
-        <motion.div
-          variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.1 } } }}
-          initial="hidden"
-          whileInView="visible"
-          viewport={viewportConfig}
-          className="flex items-end gap-6 md:gap-8 overflow-x-auto scrollbar-hide pb-8
-                     px-6 md:px-12 lg:px-20 xl:px-28"
-          /* Add top padding to give space for the floating category tag */
-          style={{ paddingTop: 36 }}
-        >
-          {speakers.map((speaker, i) => (
-            <SpeakerCard
-              key={speaker.id}
-              speaker={speaker}
-              idx={i}
-              onClick={() => setSelected(speaker)}
-            />
-          ))}
-          {/* Trailing spacer */}
-          <div className="flex-shrink-0 w-4 md:w-10" />
-        </motion.div>
+          {/* ── Three-column masonry card grid ──────────── */}
+          <div className="flex-1 flex gap-6 items-start">
+            {COLUMNS.map((col, ci) => (
+              <div
+                key={ci}
+                className="flex-1 flex flex-col gap-10"
+                style={{ paddingTop: COLUMN_TOPS[ci] }}
+              >
+                {col.map(({ speakerIdx, styleIdx }, ri) => {
+                  const speaker = speakers[speakerIdx];
+                  if (!speaker) return null;
+                  return (
+                    <SpeakerCard
+                      key={speaker.id}
+                      speaker={speaker}
+                      styleIdx={styleIdx}
+                      colIdx={ci}
+                      rowIdx={ri}
+                      onClick={() => setSelected(speaker)}
+                    />
+                  );
+                })}
+              </div>
+            ))}
+          </div>
+
+        </div>
       </section>
 
       <SpeakerPanel speaker={selected} onClose={() => setSelected(null)} />
