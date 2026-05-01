@@ -1,191 +1,178 @@
 'use client';
 
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import Image from 'next/image';
-import { FiArrowLeft, FiArrowRight } from 'react-icons/fi';
 import { SpeakerEntity } from '@/domain/types';
 import { fadeInUp, viewportConfig } from '@/lib/animations';
 import { SpeakerPanel } from '../ui/SpeakerPanel';
-import { cn, getInitials } from '@/lib/utils';
+import { getInitials } from '@/lib/utils';
 
 interface SpeakersSectionProps {
   speakers: SpeakerEntity[];
 }
 
-const avatarGradients = [
-  'from-[#1A5430] to-[#226C3D]',
-  'from-[#226C3D] to-[#4CAF70]',
-  'from-[#8B6914] to-[#C9A227]',
-  'from-[#004B87] to-[#0071C5]',
+/* Per-speaker card config: background, badge colors, photo height */
+const cardStyles = [
+  { bg: '#226C3D', photoH: 420, badgeBg: '#F2E4CC',  badgeText: '#1A5430' },
+  { bg: '#F2E4CC', photoH: 520, badgeBg: '#226C3D',  badgeText: '#F2E4CC' },
+  { bg: '#1A5430', photoH: 520, badgeBg: '#F2E4CC',  badgeText: '#1A5430' },
+  { bg: '#8B6914', photoH: 420, badgeBg: '#F2E4CC',  badgeText: '#8B6914' },
 ];
 
-function gradientFor(id: string) {
-  const idx = id.split('').reduce((acc, c) => acc + c.charCodeAt(0), 0) % avatarGradients.length;
-  return avatarGradients[idx];
-}
-
-interface ThumbProps {
-  speaker: SpeakerEntity;
-  onClick: () => void;
-  direction: 'left' | 'right';
-}
-
-function SpeakerThumb({ speaker, onClick, direction }: ThumbProps) {
+/* ── Corner selection handles (Figma-aesthetic) ─────────── */
+function CornerHandles({ color }: { color: string }) {
+  const BORDER = color === '#F2E4CC' ? '#1A1A1A' : '#1A1A1A';
+  const BG     = color === '#F2E4CC' ? 'white'   : 'white';
+  const pos = ['-top-1.5 -left-1.5', '-top-1.5 -right-1.5', '-bottom-1.5 -left-1.5', '-bottom-1.5 -right-1.5'];
   return (
-    <motion.button
-      initial={{ opacity: 0, x: direction === 'left' ? -30 : 30 }}
-      animate={{ opacity: 0.4, x: 0 }}
-      exit={{ opacity: 0, x: direction === 'left' ? -30 : 30 }}
-      transition={{ type: 'spring', damping: 28, stiffness: 220 }}
-      onClick={onClick}
-      className="flex-shrink-0 w-36 md:w-44 lg:w-56 group hover:opacity-60 transition-opacity"
+    <>
+      {pos.map((cls, i) => (
+        <div
+          key={i}
+          className={`absolute ${cls} w-3.5 h-3.5 z-30 pointer-events-none`}
+          style={{ backgroundColor: BG, border: `2px solid ${BORDER}` }}
+        />
+      ))}
+      <div className="absolute inset-0 z-10 pointer-events-none" style={{ border: `2px solid ${BORDER}` }} />
+    </>
+  );
+}
+
+interface CardProps {
+  speaker: SpeakerEntity;
+  idx: number;
+  onClick: () => void;
+}
+
+function SpeakerCard({ speaker, idx, onClick }: CardProps) {
+  const { bg, photoH, badgeBg, badgeText } = cardStyles[idx % cardStyles.length];
+  const tag = speaker.tags?.[0] ?? 'Panelist';
+
+  return (
+    <motion.div
+      variants={fadeInUp}
+      className="flex-shrink-0 flex flex-col"
+      style={{ width: 290 }}
     >
-      <div className="relative aspect-[3/4] rounded-xl overflow-hidden bg-[#226C3D]">
-        {speaker.photo ? (
-          <Image
-            src={speaker.photo}
-            alt={speaker.name}
-            fill
-            className="object-cover object-top grayscale"
-          />
-        ) : (
-          <div className={cn('w-full h-full flex items-center justify-center text-white text-3xl', `bg-gradient-to-br ${gradientFor(speaker.id)}`)}>
-            {getInitials(speaker.name)}
-          </div>
-        )}
-        <div className="absolute inset-0 bg-[#1A5430]/30" />
+      {/* ── Photo card (variable height) ─────────────── */}
+      <button
+        onClick={onClick}
+        className="relative w-full group focus:outline-none"
+        style={{ height: photoH, backgroundColor: bg }}
+      >
+        <CornerHandles color={bg} />
+
+        {/* Floating category pill — above the photo */}
+        <div className="absolute -top-5 left-1/2 -translate-x-1/2 z-20 whitespace-nowrap">
+          <span className="block bg-white border border-[#E0D1B5] shadow-sm px-4 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-wider text-[#1A1A1A]">
+            {tag}
+          </span>
+        </div>
+
+        {/* Photo */}
+        <div className="absolute inset-0 overflow-hidden">
+          {speaker.photo ? (
+            <Image
+              src={speaker.photo}
+              alt={speaker.name}
+              fill
+              className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
+            />
+          ) : (
+            <div
+              className="w-full h-full flex items-center justify-center text-white font-bold"
+              style={{ fontSize: 72 }}
+            >
+              {getInitials(speaker.name)}
+            </div>
+          )}
+          {/* Hover tint */}
+          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 z-10" />
+        </div>
+
+        {/* Name badge — bottom left */}
+        <div className="absolute bottom-4 left-4 z-20">
+          <span
+            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[12px] font-bold shadow-md"
+            style={{ backgroundColor: badgeBg, color: badgeText }}
+          >
+            <span style={{ fontSize: 8, opacity: 0.7 }}>▶</span>
+            {speaker.name}
+          </span>
+        </div>
+      </button>
+
+      {/* ── Bio box below card ────────────────────────── */}
+      <div className="mt-5 px-0.5">
+        <p className="text-[#1A1A1A] text-sm font-bold mb-1.5 leading-snug">{speaker.title}</p>
+        <p className="text-[#226C3D] text-xs font-semibold mb-2">{speaker.company}</p>
+        <p className="text-[#5C5046] text-sm leading-relaxed">
+          {speaker.bio}
+        </p>
       </div>
-    </motion.button>
+    </motion.div>
   );
 }
 
 export function SpeakersSection({ speakers }: SpeakersSectionProps) {
-  const [activeIndex, setActiveIndex] = useState(0);
   const [selected, setSelected] = useState<SpeakerEntity | null>(null);
-
-  const prev = () => setActiveIndex(i => Math.max(0, i - 1));
-  const next = () => setActiveIndex(i => Math.min(speakers.length - 1, i + 1));
-
-  const prevSpeaker = activeIndex > 0 ? speakers[activeIndex - 1] : null;
-  const activeSpeaker = speakers[activeIndex];
-  const nextSpeaker = activeIndex < speakers.length - 1 ? speakers[activeIndex + 1] : null;
 
   return (
     <>
-      <section id="speakers" className="pt-24 md:pt-32 pb-20 md:pb-28 bg-[#1A5430] overflow-hidden">
-        {/* Header */}
-        <div className="px-6 md:px-12 lg:px-20 xl:px-28 mb-16 md:mb-20">
-          <motion.div
-            variants={fadeInUp}
-            initial="hidden"
-            whileInView="visible"
-            viewport={viewportConfig}
-          >
-            <p className="text-[#F2E4CC]/35 text-xs font-bold uppercase tracking-[0.25em] mb-5">
-              The Panelists
-            </p>
-            <h2
-              className="font-instrument italic text-[#F2E4CC] leading-[0.92]"
-              style={{ fontSize: 'clamp(2.8rem, 7vw, 7rem)' }}
-            >
-              Voices that have<br />walked the path.
-            </h2>
-          </motion.div>
-        </div>
+      <section id="speakers" className="pt-24 md:pt-32 pb-28 md:pb-36 bg-[#F2E4CC] overflow-hidden">
 
-        {/* Carousel */}
-        <div className="flex items-end justify-center gap-4 md:gap-6 px-4 mb-10 md:mb-14">
-          {/* Prev slot */}
-          <div className="flex-shrink-0 w-36 md:w-44 lg:w-56">
-            <AnimatePresence mode="wait">
-              {prevSpeaker && (
-                <SpeakerThumb
-                  key={prevSpeaker.id}
-                  speaker={prevSpeaker}
-                  onClick={prev}
-                  direction="left"
-                />
-              )}
-            </AnimatePresence>
-          </div>
-
-          {/* Active speaker */}
-          <AnimatePresence mode="wait">
-            <motion.button
-              key={activeSpeaker.id}
-              initial={{ opacity: 0, scale: 0.94, y: 16 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.94, y: -16 }}
-              transition={{ type: 'spring', damping: 26, stiffness: 200 }}
-              onClick={() => setSelected(activeSpeaker)}
-              className="flex-shrink-0 w-64 md:w-80 lg:w-[26rem] group text-left"
-            >
-              <div className="relative aspect-[3/4] rounded-2xl overflow-hidden bg-[#226C3D] mb-5">
-                {activeSpeaker.photo ? (
-                  <Image
-                    src={activeSpeaker.photo}
-                    alt={activeSpeaker.name}
-                    fill
-                    className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
-                  />
-                ) : (
-                  <div className={cn('w-full h-full flex items-center justify-center text-white text-7xl md:text-8xl', `bg-gradient-to-br ${gradientFor(activeSpeaker.id)}`)}>
-                    {getInitials(activeSpeaker.name)}
-                  </div>
-                )}
-                {/* Dark overlay on hover */}
-                <div className="absolute inset-0 bg-[#1A5430]/0 group-hover:bg-[#1A5430]/25 transition-all duration-300" />
-                {/* View profile pill */}
-                <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                  <div className="bg-[#F2E4CC]/95 backdrop-blur-sm rounded-xl px-4 py-2.5 text-center">
-                    <p className="text-[#226C3D] text-xs font-bold tracking-widest uppercase">View Profile</p>
-                  </div>
-                </div>
-              </div>
-              <p className="font-instrument italic text-xl md:text-2xl lg:text-3xl text-[#F2E4CC] leading-tight mb-1 group-hover:text-white transition-colors">
-                {activeSpeaker.name}
+        {/* ── Section header ──────────────────────────── */}
+        <div className="px-6 md:px-12 lg:px-20 xl:px-28 mb-20">
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+            <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={viewportConfig}>
+              <p className="text-[#226C3D] text-xs font-bold uppercase tracking-[0.25em] mb-5">
+                The Panelists
               </p>
-              <p className="text-[#F2E4CC]/40 text-sm">{activeSpeaker.title}</p>
-              <p className="text-[#4CAF70] text-xs font-medium mt-0.5">{activeSpeaker.company}</p>
-            </motion.button>
-          </AnimatePresence>
+              <h2
+                className="font-instrument italic text-[#1A1A1A] leading-[0.9]"
+                style={{ fontSize: 'clamp(2.8rem, 6.5vw, 6.5rem)' }}
+              >
+                Voices that<br />walked the path.
+              </h2>
+            </motion.div>
 
-          {/* Next slot */}
-          <div className="flex-shrink-0 w-36 md:w-44 lg:w-56">
-            <AnimatePresence mode="wait">
-              {nextSpeaker && (
-                <SpeakerThumb
-                  key={nextSpeaker.id}
-                  speaker={nextSpeaker}
-                  onClick={next}
-                  direction="right"
-                />
-              )}
-            </AnimatePresence>
+            <motion.p
+              variants={fadeInUp}
+              initial="hidden"
+              whileInView="visible"
+              viewport={viewportConfig}
+              className="text-[#5C5046] text-sm max-w-xs leading-relaxed md:text-right flex-shrink-0"
+            >
+              Industry leaders, entrepreneurs, and executives sharing real career paths.
+              <br />
+              <span className="text-[#226C3D] font-medium">Click any card to read their story.</span>
+            </motion.p>
           </div>
         </div>
 
-        {/* Navigation */}
-        <div className="flex items-center justify-center gap-6">
-          <button
-            onClick={prev}
-            disabled={activeIndex === 0}
-            className="w-12 h-12 rounded-full border border-[#F2E4CC]/20 flex items-center justify-center text-[#F2E4CC]/50 hover:text-[#F2E4CC] hover:border-[#F2E4CC]/50 transition-all disabled:opacity-20 disabled:cursor-not-allowed"
-          >
-            <FiArrowLeft size={18} />
-          </button>
-          <p className="text-[#F2E4CC]/35 text-sm font-medium tabular-nums tracking-widest">
-            {String(activeIndex + 1).padStart(2, '0')} / {String(speakers.length).padStart(2, '0')}
-          </p>
-          <button
-            onClick={next}
-            disabled={activeIndex === speakers.length - 1}
-            className="w-12 h-12 rounded-full border border-[#F2E4CC]/20 flex items-center justify-center text-[#F2E4CC]/50 hover:text-[#F2E4CC] hover:border-[#F2E4CC]/50 transition-all disabled:opacity-20 disabled:cursor-not-allowed"
-          >
-            <FiArrowRight size={18} />
-          </button>
-        </div>
+        {/* ── Cards — horizontal scroll, bottom-aligned ─ */}
+        <motion.div
+          variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.1 } } }}
+          initial="hidden"
+          whileInView="visible"
+          viewport={viewportConfig}
+          className="flex items-end gap-6 md:gap-8 overflow-x-auto scrollbar-hide pb-8
+                     px-6 md:px-12 lg:px-20 xl:px-28"
+          /* Add top padding to give space for the floating category tag */
+          style={{ paddingTop: 36 }}
+        >
+          {speakers.map((speaker, i) => (
+            <SpeakerCard
+              key={speaker.id}
+              speaker={speaker}
+              idx={i}
+              onClick={() => setSelected(speaker)}
+            />
+          ))}
+          {/* Trailing spacer */}
+          <div className="flex-shrink-0 w-4 md:w-10" />
+        </motion.div>
       </section>
 
       <SpeakerPanel speaker={selected} onClose={() => setSelected(null)} />

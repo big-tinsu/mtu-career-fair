@@ -1,52 +1,89 @@
 'use client';
 
-import { useEffect } from 'react';
-import { motion, useMotionValue, useSpring } from 'framer-motion';
+import { useEffect, useRef } from 'react';
 
 export function CustomCursor() {
-  const mouseX = useMotionValue(-100);
-  const mouseY = useMotionValue(-100);
-  const scale = useMotionValue(1);
-
-  const x = useSpring(mouseX, { damping: 24, stiffness: 180, mass: 0.35 });
-  const y = useSpring(mouseY, { damping: 24, stiffness: 180, mass: 0.35 });
-  const s = useSpring(scale, { damping: 20, stiffness: 250 });
+  const dotRef  = useRef<HTMLDivElement>(null);
+  const ringRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const HALF = 22;
+    let raf: number;
+    let tx = -100, ty = -100;       // target (exact mouse)
+    let rx = -100, ry = -100;       // ring current (lerped)
+    let rs = 1,    rts = 1;         // ring scale current / target
 
-    const move = (e: MouseEvent) => {
-      mouseX.set(e.clientX - HALF);
-      mouseY.set(e.clientY - HALF);
-    };
+    const LERP_POS   = 0.13;
+    const LERP_SCALE = 0.14;
+    const DOT_R      = 6;           // dot radius px (diameter 12)
+    const RING_R     = 28;          // ring radius px (diameter 56)
 
-    const over = (e: MouseEvent) => {
-      if ((e.target as Element).closest('a, button, [role="button"], input, select, textarea, label')) {
-        scale.set(2.1);
+    const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+
+    /* ── mouse move: dot is instant ─────────────────────────── */
+    const onMove = (e: MouseEvent) => {
+      tx = e.clientX;
+      ty = e.clientY;
+      if (dotRef.current) {
+        dotRef.current.style.transform =
+          `translate(${tx - DOT_R}px, ${ty - DOT_R}px)`;
       }
     };
 
-    const out = (e: MouseEvent) => {
-      if ((e.target as Element).closest('a, button, [role="button"], input, select, textarea, label')) {
-        scale.set(1);
+    /* ── hover state: ring grows ─────────────────────────────── */
+    const onOver = (e: MouseEvent) => {
+      if ((e.target as Element).closest('a, button, [role="button"], input, select, textarea')) {
+        rts = 1.8;
+        dotRef.current?.classList.add('scale-0');
+      }
+    };
+    const onOut = (e: MouseEvent) => {
+      if ((e.target as Element).closest('a, button, [role="button"], input, select, textarea')) {
+        rts = 1;
+        dotRef.current?.classList.remove('scale-0');
       }
     };
 
-    window.addEventListener('mousemove', move);
-    document.addEventListener('mouseover', over);
-    document.addEventListener('mouseout', out);
+    /* ── animation loop ──────────────────────────────────────── */
+    const tick = () => {
+      rx = lerp(rx, tx, LERP_POS);
+      ry = lerp(ry, ty, LERP_POS);
+      rs = lerp(rs, rts, LERP_SCALE);
+
+      if (ringRef.current) {
+        ringRef.current.style.transform =
+          `translate(${rx - RING_R}px, ${ry - RING_R}px) scale(${rs})`;
+      }
+      raf = requestAnimationFrame(tick);
+    };
+
+    window.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseover', onOver);
+    document.addEventListener('mouseout',  onOut);
+    raf = requestAnimationFrame(tick);
 
     return () => {
-      window.removeEventListener('mousemove', move);
-      document.removeEventListener('mouseover', over);
-      document.removeEventListener('mouseout', out);
+      cancelAnimationFrame(raf);
+      window.removeEventListener('mousemove', onMove);
+      document.removeEventListener('mouseover', onOver);
+      document.removeEventListener('mouseout',  onOut);
     };
-  }, [mouseX, mouseY, scale]);
+  }, []);
 
   return (
-    <motion.div
-      className="fixed top-0 left-0 w-11 h-11 rounded-full bg-white mix-blend-difference pointer-events-none z-[9999]"
-      style={{ x, y, scale: s }}
-    />
+    <>
+      {/* Dot — exact position, instant */}
+      <div
+        ref={dotRef}
+        className="fixed top-0 left-0 w-3 h-3 rounded-full bg-[#226C3D] pointer-events-none z-[9999] transition-transform duration-150"
+        style={{ willChange: 'transform' }}
+      />
+
+      {/* Ring — lags behind, scale on hover */}
+      <div
+        ref={ringRef}
+        className="fixed top-0 left-0 w-14 h-14 rounded-full border-2 border-[#226C3D] pointer-events-none z-[9998]"
+        style={{ willChange: 'transform' }}
+      />
+    </>
   );
 }
