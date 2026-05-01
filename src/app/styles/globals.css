@@ -31,6 +31,12 @@
     font-family: 'Inter', system-ui, sans-serif;
   }
 
+  @media (hover: hover) and (pointer: fine) {
+    *, *::before, *::after {
+      cursor: none !important;
+    }
+  }
+
   h1, .h1 {
     @apply font-black text-3xl md:text-5xl text-[#1A1A1A] leading-tight tracking-tight;
     font-family: 'Instrument Serif', Georgia, serif;
@@ -68,6 +74,16 @@
   .animated-underline:hover {
     background-size: 0 2px, 100% 2px;
   }
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+@keyframes marquee-reverse {
+  from { transform: translateX(-50%); }
+  to   { transform: translateX(0); }
 }
 
 * {

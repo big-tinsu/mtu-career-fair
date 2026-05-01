@@ -9,49 +9,65 @@ interface FooterProps {
 
 export function Footer({ event }: FooterProps) {
   return (
-    <footer className="bg-[#226C3D] text-white">
-      <div className="layout py-16">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mb-12">
+    <footer className="bg-[#1A1A1A] text-white overflow-hidden relative">
+      {/* Giant AURA watermark */}
+      <div
+        className="absolute bottom-0 left-0 leading-none pointer-events-none select-none overflow-hidden"
+        aria-hidden
+      >
+        <p
+          className="font-instrument italic text-white/[0.04]"
+          style={{ fontSize: 'clamp(8rem, 22vw, 24rem)', lineHeight: 0.85 }}
+        >
+          AURA
+        </p>
+      </div>
+
+      <div className="relative z-10">
+        {/* Main footer grid */}
+        <div className="px-6 md:px-12 lg:px-20 xl:px-28 pt-16 md:pt-20 pb-12 grid grid-cols-1 md:grid-cols-3 gap-12">
+          {/* Brand */}
           <div>
-            <div className="flex items-center gap-2.5 mb-4">
-              <div className="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center text-white font-bold text-sm">
-                A
-              </div>
-              <div>
-                <span className="text-white font-bold text-sm font-manrope block">AURA Career Fair</span>
-                <span className="text-white/50 text-[10px]">Beyond the Degree</span>
-              </div>
-            </div>
-            <p className="text-white/60 text-sm leading-relaxed max-w-xs">
-              Connecting Mountain Top University students with global career opportunities.
+            <p className="font-instrument italic text-3xl md:text-4xl text-[#F2E4CC] leading-none mb-4">AURA</p>
+            <p className="text-white/30 text-xs font-bold uppercase tracking-[0.2em] mb-4">Beyond the Degree</p>
+            <p className="text-white/50 text-sm leading-relaxed max-w-xs">
+              Connecting Mountain Top University students with global career opportunities, mentors, and industry leaders.
             </p>
           </div>
 
+          {/* Event details */}
           <div>
-            <p className="text-white/50 font-semibold text-xs uppercase tracking-widest mb-4">Event Details</p>
-            <ul className="space-y-2 text-sm text-white/60">
-              <li className="text-white/80">{formatDate(event.date)}</li>
-              <li>{event.time} – {event.endTime}</li>
-              <li>{event.location}</li>
-              <li className="text-xs">{event.address}</li>
+            <p className="text-white/30 text-[10px] font-bold uppercase tracking-[0.2em] mb-5">Event Details</p>
+            <ul className="space-y-3">
+              <li className="text-white/80 text-sm font-semibold">{formatDate(event.date)}</li>
+              <li className="text-white/50 text-sm">{event.time} – {event.endTime}</li>
+              <li className="text-white/50 text-sm">{event.location}</li>
+              <li className="text-white/30 text-xs leading-relaxed">{event.address}</li>
             </ul>
           </div>
 
+          {/* Links */}
           <div>
-            <p className="text-white/50 font-semibold text-xs uppercase tracking-widest mb-4">Quick Links</p>
-            <ul className="space-y-2 text-sm">
+            <p className="text-white/30 text-[10px] font-bold uppercase tracking-[0.2em] mb-5">Quick Links</p>
+            <ul className="space-y-3">
+              {[
+                { label: 'Register Now', href: `/events/${event.slug}/register` },
+                { label: 'Organizer Dashboard', href: '/admin' },
+              ].map(({ label, href }) => (
+                <li key={href}>
+                  <Link
+                    href={href}
+                    className="text-white/50 hover:text-white text-sm transition-colors hover:underline"
+                  >
+                    {label}
+                  </Link>
+                </li>
+              ))}
               <li>
-                <Link href={`/events/${event.slug}/register`} className="text-white/60 hover:text-white transition-colors">
-                  Register Now
-                </Link>
-              </li>
-              <li>
-                <Link href="/admin" className="text-white/60 hover:text-white transition-colors">
-                  Organizer Dashboard
-                </Link>
-              </li>
-              <li>
-                <a href="mailto:src@mtu.edu.ng" className="text-white/60 hover:text-white transition-colors">
+                <a
+                  href="mailto:src@mtu.edu.ng"
+                  className="text-white/50 hover:text-white text-sm transition-colors hover:underline"
+                >
                   Contact Organisers
                 </a>
               </li>
@@ -59,22 +75,33 @@ export function Footer({ event }: FooterProps) {
           </div>
         </div>
 
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-8 border-t border-white/10">
-          <p className="text-white/40 text-xs">
-            © 2026 {event.organizer.name}. All rights reserved.
+        {/* Bottom bar */}
+        <div className="px-6 md:px-12 lg:px-20 xl:px-28 py-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-t border-white/8">
+          <p className="text-white/25 text-xs">
+            © 2026 {event.organizer.name}. Free to attend.
           </p>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-5">
             {event.socialLinks?.twitter && (
-              <a href={event.socialLinks.twitter} className="text-white/40 hover:text-white transition-colors">
+              <a
+                href={event.socialLinks.twitter}
+                className="text-white/30 hover:text-white transition-colors"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <FiTwitter size={16} />
               </a>
             )}
             {event.socialLinks?.instagram && (
-              <a href={event.socialLinks.instagram} className="text-white/40 hover:text-white transition-colors">
+              <a
+                href={event.socialLinks.instagram}
+                className="text-white/30 hover:text-white transition-colors"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <FiInstagram size={16} />
               </a>
             )}
-            <a href="mailto:src@mtu.edu.ng" className="text-white/40 hover:text-white transition-colors">
+            <a href="mailto:src@mtu.edu.ng" className="text-white/30 hover:text-white transition-colors">
               <FiMail size={16} />
             </a>
           </div>
