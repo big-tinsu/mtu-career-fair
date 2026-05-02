@@ -92,7 +92,7 @@ export function PartnersSection({ partners }: PartnersSectionProps) {
 
   return (
     <section id="partners" className="bg-[#F2E4CC] overflow-hidden" style={{ paddingTop: 0, paddingBottom: 0 }}>
-      <div className="flex min-h-[70vh]">
+      <div className="flex min-h-[70vh] items-center">
 
         {/* ── Left info panel ─────────────────────────── */}
         <div
@@ -137,9 +137,10 @@ export function PartnersSection({ partners }: PartnersSectionProps) {
           className="flex-1 grid gap-4"
           style={{
             gridTemplateColumns: 'repeat(3, 1fr)',
-            gridTemplateRows: 'repeat(2, 1fr)',
+            gridAutoRows: 'minmax(180px, 220px)',
             padding: 'clamp(1.5rem, 4vw, 3rem)',
             alignContent: 'center',
+            alignItems: 'center',
           }}
         >
           {gridPartners.map((partner, idx) => (

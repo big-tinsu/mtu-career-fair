@@ -68,10 +68,35 @@ function TestimonialCard({ card, i, progress, range, targetScale }: CardProps) {
 
   return (
     <div
-      className="h-screen sticky top-0 flex justify-center items-start"
-      style={{ paddingTop: BASE_TOP + i * CARD_OFFSET, zIndex: i + 1 }}
+      className="h-screen sticky top-0 flex justify-center items-start overflow-hidden"
+      style={{ paddingTop: `calc(50vh - 160px + ${i * CARD_OFFSET}px)`, zIndex: i + 1 }}
     >
-      <motion.div style={{ scale, transformOrigin: 'top center', width: 'min(88vw, 600px)' }}>
+      {/* Large background text — sits behind card */}
+      <div className="absolute inset-0 flex items-center pointer-events-none select-none overflow-hidden">
+        <span
+          className="absolute left-[-2vw] font-instrument italic text-[#1A1A1A] opacity-[0.07] whitespace-nowrap leading-none"
+          style={{ fontSize: '22vw' }}
+        >
+          AURA
+        </span>
+        <div
+          className="absolute right-[4vw] top-1/2 -translate-y-1/2 flex items-center justify-center"
+          style={{
+            backgroundColor: '#C9A227',
+            borderRadius: 12,
+            padding: '10px 28px',
+          }}
+        >
+          <span
+            className="font-instrument italic text-white leading-none"
+            style={{ fontSize: 'clamp(2rem, 5vw, 4rem)' }}
+          >
+            Love
+          </span>
+        </div>
+      </div>
+
+      <motion.div style={{ scale, transformOrigin: 'top center', width: 'min(88vw, 600px)', position: 'relative', zIndex: 2 }}>
 
         {/* Main card */}
         <div
@@ -80,9 +105,9 @@ function TestimonialCard({ card, i, progress, range, targetScale }: CardProps) {
             zIndex: 1,
             backgroundColor: '#FFFFFF',
             border: '2.5px solid #1A1A1A',
-            borderRadius: 20,
+            borderRadius: 60,
             transform: `rotate(${rot}deg)`,
-            padding: '22px 26px 20px',
+            padding: '55px 26px 55px',
           }}
         >
           {/* Header row */}
