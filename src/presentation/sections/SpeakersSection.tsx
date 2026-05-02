@@ -132,7 +132,7 @@ export function SpeakersSection({ speakers }: SpeakersSectionProps) {
 
   return (
     <>
-      <section id="speakers" className="bg-[#F2E4CC]" style={{ paddingTop: 120, paddingBottom: 140, paddingLeft: 'clamp(1.5rem, 4vw, 3rem)', paddingRight: 'clamp(1.5rem, 4vw, 3rem)' }}>
+      <section id="speakers" className="bg-[#F2E4CC]" style={{ paddingTop: 20, paddingBottom: 20, paddingLeft: 'clamp(1.5rem, 4vw, 3rem)', paddingRight: 'clamp(1.5rem, 4vw, 3rem)' }}>
         <div className="flex gap-10 items-start" style={{ maxWidth: 1440, margin: '0 auto' }}>
 
           {/* ── Left info panel ─────────────────────────── */}

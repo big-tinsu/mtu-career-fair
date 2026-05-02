@@ -96,7 +96,7 @@ export function PartnersSection({ partners }: PartnersSectionProps) {
 
         {/* ── Left info panel ─────────────────────────── */}
         <div
-          className="flex-shrink-0 flex flex-col justify-center border-r border-[#E0D1B5]"
+          className="flex-shrink-0 flex flex-col justify-center"
           style={{
             width: 'clamp(260px, 30vw, 380px)',
             padding: 'clamp(2.5rem, 5vw, 4.5rem)',

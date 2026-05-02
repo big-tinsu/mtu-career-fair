@@ -2,110 +2,122 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { FiArrowRight } from 'react-icons/fi';
 import { EventEntity } from '@/domain/types';
-import { fadeInUp, viewportConfig } from '@/lib/animations';
-import { formatDate, getSpotsRemaining } from '@/lib/utils';
-import { WordReveal } from '../ui/WordReveal';
 
-interface RegistrationCTASectionProps {
+interface Props {
   event: EventEntity;
 }
 
-export function RegistrationCTASection({ event }: RegistrationCTASectionProps) {
-  const spots = getSpotsRemaining(event.capacity, event.registeredCount);
-
+export function RegistrationCTASection({ event }: Props) {
   return (
-    <section id="register" className="bg-[#226C3D] relative overflow-hidden">
-      {/* Large ghost watermark */}
+    <section
+      className="flex items-center justify-center"
+      style={{
+        backgroundColor: '#F2E4CC',
+        padding: 'clamp(3rem, 6vw, 5rem) clamp(1.5rem, 4vw, 3rem)',
+      }}
+    >
+      {/* ── Outermost layer: thin dark border ── */}
       <div
-        className="absolute inset-0 flex items-center overflow-hidden pointer-events-none select-none"
-        aria-hidden
-      >
-        <p
-          className="font-instrument italic text-white/[0.04] whitespace-nowrap leading-none"
-          style={{ fontSize: 'clamp(8rem, 22vw, 22rem)' }}
-        >
-          MAY 11 · 2026
-        </p>
-      </div>
-
-      {/* Dot grid texture */}
-      <div
-        className="absolute inset-0 opacity-[0.035]"
+        className="w-full"
         style={{
-          backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)',
-          backgroundSize: '28px 28px',
+          maxWidth: 1200,
+          borderRadius: 52,
+          padding: 4,
+          backgroundColor: '#1A1A1A',
         }}
-      />
-
-      {/* Top rule */}
-      <motion.div
-        initial={{ scaleX: 0, originX: 0 }}
-        whileInView={{ scaleX: 1 }}
-        viewport={viewportConfig}
-        transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
-        className="absolute top-0 left-0 right-0 h-px bg-white/15"
-      />
-
-      <div className="relative z-10 px-6 md:px-12 lg:px-20 xl:px-28 pt-24 md:pt-36 pb-24 md:pb-40">
-        {/* Overline */}
-        <motion.p
-          variants={fadeInUp}
-          initial="hidden"
-          whileInView="visible"
-          viewport={viewportConfig}
-          className="text-white/30 text-xs font-bold uppercase tracking-[0.28em] mb-10"
-        >
-          Don&apos;t Miss Out
-        </motion.p>
-
-        {/* Massive heading */}
-        <h2
-          className="font-instrument italic text-white leading-[0.88] mb-14 md:mb-16"
-          style={{ fontSize: 'clamp(3rem, 9vw, 9.5rem)' }}
-        >
-          <WordReveal text="Your career journey" delay={0.05} staggerDelay={0.06} />
-          <br />
-          <span className="text-[#F2E4CC]">
-            <WordReveal text="starts May 11." delay={0.4} staggerDelay={0.07} />
-          </span>
-        </h2>
-
-        {/* CTA row */}
-        <motion.div
-          variants={fadeInUp}
-          initial="hidden"
-          whileInView="visible"
-          viewport={viewportConfig}
-          className="flex flex-col sm:flex-row items-start sm:items-center gap-8 md:gap-12"
-        >
-          <Link href={`/events/${event.slug}/register`}>
-            <motion.button
-              whileHover={{ scale: 1.02, backgroundColor: '#fff' }}
-              whileTap={{ scale: 0.98 }}
-              className="flex items-center gap-3 bg-[#F2E4CC] text-[#1A5430] font-bold text-sm px-8 py-4 rounded-full transition-colors"
+      >
+        {/* ── Gold ring ── */}
+        <div style={{ borderRadius: 49, padding: 20, backgroundColor: '#C9A227' }}>
+          {/* ── Dark green ring ── */}
+          <div style={{ borderRadius: 34, padding: 14, backgroundColor: '#1A5430' }}>
+            {/* ── Inner card: main green ── */}
+            <div
+              style={{
+                borderRadius: 24,
+                backgroundColor: '#226C3D',
+                padding: 'clamp(3.5rem, 8vw, 6rem) clamp(2rem, 6vw, 4rem)',
+                textAlign: 'center',
+                minHeight: 440,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: 28,
+                position: 'relative',
+                overflow: 'hidden',
+              }}
             >
-              Register Free Now
-              <FiArrowRight size={16} />
-            </motion.button>
-          </Link>
+              {/* Faint watermark behind text */}
+              <div
+                className="absolute inset-0 flex items-center justify-center pointer-events-none select-none"
+                aria-hidden
+              >
+                <span
+                  className="font-instrument italic text-white whitespace-nowrap"
+                  style={{ fontSize: 'clamp(6rem, 18vw, 18rem)', opacity: 0.05, lineHeight: 1 }}
+                >
+                  AURA
+                </span>
+              </div>
 
-          <div className="flex flex-wrap gap-8">
-            <div>
-              <p className="text-white/35 text-[10px] font-bold uppercase tracking-[0.2em] mb-1">When</p>
-              <p className="text-white/70 text-sm font-medium">{formatDate(event.date)} · {event.time} – {event.endTime}</p>
-            </div>
-            <div>
-              <p className="text-white/35 text-[10px] font-bold uppercase tracking-[0.2em] mb-1">Where</p>
-              <p className="text-white/70 text-sm font-medium">{event.location}</p>
-            </div>
-            <div>
-              <p className="text-white/35 text-[10px] font-bold uppercase tracking-[0.2em] mb-1">Spots</p>
-              <p className="text-white text-sm font-bold">{spots} remaining</p>
+              {/* Eyebrow */}
+              <motion.p
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.5 }}
+                transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                className="relative z-10 text-[#C9A227] text-[10px] font-bold uppercase tracking-[0.3em]"
+              >
+                MTU × SRC · May 11, 2026
+              </motion.p>
+
+              {/* Headline */}
+              <motion.h2
+                initial={{ opacity: 0, y: 28 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.5 }}
+                transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+                className="relative z-10 font-instrument italic text-[#F2E4CC] leading-[0.92]"
+                style={{ fontSize: 'clamp(2.6rem, 6vw, 5.5rem)', maxWidth: 820 }}
+              >
+                Get Your Spot at the Career Event of the Year
+              </motion.h2>
+
+              {/* Subtext */}
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.5 }}
+                transition={{ duration: 0.7, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                className="relative z-10 text-[#F2E4CC]/55 leading-relaxed"
+                style={{ fontSize: 'clamp(0.9rem, 1.4vw, 1.1rem)', maxWidth: 520 }}
+              >
+                No stuffy conference rooms, no dull corporate halls — just industry leaders, real recruiters, and a community of driven professionals ready to help you go beyond the degree.
+              </motion.p>
+
+              {/* CTA Button */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true, amount: 0.5 }}
+                transition={{ duration: 0.6, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                className="relative z-10"
+              >
+                <Link href="register">
+                  <motion.button
+                    whileHover={{ scale: 1.04, backgroundColor: '#ffffff' }}
+                    whileTap={{ scale: 0.97 }}
+                    className="bg-[#F2E4CC] text-[#1A5430] font-bold px-10 py-4 rounded-full text-base transition-colors"
+                  >
+                    Register Free — It&apos;s Today
+                  </motion.button>
+                </Link>
+              </motion.div>
+
             </div>
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

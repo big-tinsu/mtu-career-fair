@@ -1,112 +1,163 @@
+'use client';
+
+import { useState } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
-import { FiInstagram, FiTwitter, FiMail } from 'react-icons/fi';
+import { FiInstagram, FiTwitter } from 'react-icons/fi';
 import { EventEntity } from '@/domain/types';
-import { formatDate } from '@/lib/utils';
 
 interface FooterProps {
   event: EventEntity;
 }
 
+const SPEAKER_PHOTOS = [
+  { src: '/images/speakers/speaker.jpeg',  name: 'Speaker 1', h: 220, color: '#226C3D' },
+  { src: '/images/speakers/speaker2.jpeg', name: 'Speaker 2', h: 290, color: '#8B6914' },
+  { src: '/images/speakers/speaker3.jpg',  name: 'Speaker 3', h: 250, color: '#1A5430' },
+  { src: '/images/speakers/speaker4.JPG',  name: 'Speaker 4', h: 310, color: '#4A7C3F' },
+  { src: '/images/speakers/speaker5.jpg',  name: 'Speaker 5', h: 260, color: '#226C3D' },
+];
+
 export function Footer({ event }: FooterProps) {
+  const [firstName, setFirstName] = useState('');
+  const [email, setEmail]         = useState('');
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    // Navigate to registration page with prefilled values
+    window.location.href = `/events/${event.slug}/register?name=${encodeURIComponent(firstName)}&email=${encodeURIComponent(email)}`;
+  }
+
   return (
-    <footer className="bg-[#1A1A1A] text-white overflow-hidden relative">
-      {/* Giant AURA watermark */}
+    <footer style={{ backgroundColor: '#F2E4CC' }}>
+
+      {/* ── Main content row ─────────────────────────────────────── */}
       <div
-        className="absolute bottom-0 left-0 leading-none pointer-events-none select-none overflow-hidden"
-        aria-hidden
+        className="flex flex-col md:flex-row items-start justify-between gap-12 border-b border-[#D5C9B3]"
+        style={{ padding: 'clamp(3rem, 6vw, 5rem) clamp(2rem, 6vw, 5rem)' }}
       >
-        <p
-          className="font-instrument italic text-white/[0.04]"
-          style={{ fontSize: 'clamp(8rem, 22vw, 24rem)', lineHeight: 0.85 }}
-        >
-          AURA
-        </p>
-      </div>
-
-      <div className="relative z-10">
-        {/* Main footer grid */}
-        <div className="px-6 md:px-12 lg:px-20 xl:px-28 pt-16 md:pt-20 pb-12 grid grid-cols-1 md:grid-cols-3 gap-12">
-          {/* Brand */}
-          <div>
-            <p className="font-instrument italic text-3xl md:text-4xl text-[#F2E4CC] leading-none mb-4">AURA</p>
-            <p className="text-white/30 text-xs font-bold uppercase tracking-[0.2em] mb-4">Beyond the Degree</p>
-            <p className="text-white/50 text-sm leading-relaxed max-w-xs">
-              Connecting Mountain Top University students with global career opportunities, mentors, and industry leaders.
-            </p>
-          </div>
-
-          {/* Event details */}
-          <div>
-            <p className="text-white/30 text-[10px] font-bold uppercase tracking-[0.2em] mb-5">Event Details</p>
-            <ul className="space-y-3">
-              <li className="text-white/80 text-sm font-semibold">{formatDate(event.date)}</li>
-              <li className="text-white/50 text-sm">{event.time} – {event.endTime}</li>
-              <li className="text-white/50 text-sm">{event.location}</li>
-              <li className="text-white/30 text-xs leading-relaxed">{event.address}</li>
-            </ul>
-          </div>
-
-          {/* Links */}
-          <div>
-            <p className="text-white/30 text-[10px] font-bold uppercase tracking-[0.2em] mb-5">Quick Links</p>
-            <ul className="space-y-3">
-              {[
-                { label: 'Register Now', href: `/events/${event.slug}/register` },
-                { label: 'Organizer Dashboard', href: '/admin' },
-              ].map(({ label, href }) => (
-                <li key={href}>
-                  <Link
-                    href={href}
-                    className="text-white/50 hover:text-white text-sm transition-colors hover:underline"
-                  >
-                    {label}
-                  </Link>
-                </li>
-              ))}
-              <li>
-                <a
-                  href="mailto:src@mtu.edu.ng"
-                  className="text-white/50 hover:text-white text-sm transition-colors hover:underline"
-                >
-                  Contact Organisers
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
-
-        {/* Bottom bar */}
-        <div className="px-6 md:px-12 lg:px-20 xl:px-28 py-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-t border-white/8">
-          <p className="text-white/25 text-xs">
-            © 2026 {event.organizer.name}. Free to attend.
+        {/* Left: heading + contact */}
+        <div className="flex-1">
+          <h2
+            className="font-instrument italic text-[#1A1A1A] leading-none mb-5"
+            style={{ fontSize: 'clamp(3rem, 6vw, 5rem)' }}
+          >
+            See You<br />There!
+          </h2>
+          <p className="text-[#5C5046] text-sm leading-relaxed mb-6" style={{ maxWidth: 320 }}>
+            Reach out to the AURA team at{' '}
+            <a
+              href="mailto:src@mtu.edu.ng"
+              className="text-[#226C3D] font-semibold underline underline-offset-2"
+            >
+              src@mtu.edu.ng
+            </a>{' '}
+            if you have any questions.
           </p>
-          <div className="flex items-center gap-5">
-            {event.socialLinks?.twitter && (
-              <a
-                href={event.socialLinks.twitter}
-                className="text-white/30 hover:text-white transition-colors"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <FiTwitter size={16} />
-              </a>
-            )}
+
+          {/* Social links */}
+          <div className="flex items-center gap-4">
             {event.socialLinks?.instagram && (
               <a
                 href={event.socialLinks.instagram}
-                className="text-white/30 hover:text-white transition-colors"
                 target="_blank"
                 rel="noopener noreferrer"
+                className="flex items-center gap-1.5 text-[#1A1A1A]/60 hover:text-[#1A1A1A] transition-colors text-sm font-medium"
               >
-                <FiInstagram size={16} />
+                <FiInstagram size={16} /> Instagram
               </a>
             )}
-            <a href="mailto:src@mtu.edu.ng" className="text-white/30 hover:text-white transition-colors">
-              <FiMail size={16} />
-            </a>
+            {event.socialLinks?.twitter && (
+              <a
+                href={event.socialLinks.twitter}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 text-[#1A1A1A]/60 hover:text-[#1A1A1A] transition-colors text-sm font-medium"
+              >
+                <FiTwitter size={16} /> Twitter
+              </a>
+            )}
+          </div>
+        </div>
+
+        {/* Right: email sign-up form */}
+        <div className="flex-shrink-0" style={{ width: 'clamp(280px, 36vw, 480px)' }}>
+          <p className="text-[#226C3D] text-[10px] font-bold uppercase tracking-[0.28em] mb-4">
+            Stay in the loop
+          </p>
+          <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+            <div className="flex gap-3">
+              <input
+                type="text"
+                placeholder="First Name"
+                value={firstName}
+                onChange={e => setFirstName(e.target.value)}
+                className="flex-1 bg-white border-2 border-[#D5C9B3] rounded-full px-5 py-3.5 text-sm text-[#1A1A1A] placeholder:text-[#9C8E7C] focus:outline-none focus:border-[#226C3D] transition-colors"
+              />
+              <input
+                type="email"
+                placeholder="Email"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                required
+                className="flex-1 bg-white border-2 border-[#D5C9B3] rounded-full px-5 py-3.5 text-sm text-[#1A1A1A] placeholder:text-[#9C8E7C] focus:outline-none focus:border-[#226C3D] transition-colors"
+              />
+            </div>
+            <button
+              type="submit"
+              className="w-full bg-[#226C3D] text-[#F2E4CC] font-bold text-sm py-4 rounded-full hover:bg-[#1A5430] transition-colors"
+            >
+              Register for Free
+            </button>
+          </form>
+
+          {/* Quick links */}
+          <div className="flex gap-6 mt-6">
+            {['About', 'Speakers', 'Partners'].map(l => (
+              <Link
+                key={l}
+                href={`#${l.toLowerCase()}`}
+                className="text-[#5C5046] text-[13px] hover:text-[#1A1A1A] transition-colors"
+              >
+                {l}
+              </Link>
+            ))}
           </div>
         </div>
       </div>
+
+      {/* ── Speaker photo strip ──────────────────────────────────── */}
+      {/* <div className="flex items-end w-full overflow-hidden">
+        {SPEAKER_PHOTOS.map((photo) => (
+          <div
+            key={photo.src}
+            className="relative flex-1 flex-shrink-0 overflow-hidden"
+            style={{ height: photo.h, backgroundColor: photo.color }}
+          >
+            <Image
+              src={photo.src}
+              alt={photo.name}
+              fill
+              className="object-cover object-top"
+              sizes="20vw"
+            />
+          </div>
+        ))}
+      </div> */}
+
+      {/* ── Copyright bar ────────────────────────────────────────── */}
+      <div
+        className="flex items-center justify-between border-t border-[#D5C9B3]"
+        style={{ padding: '1rem clamp(2rem, 6vw, 5rem)' }}
+      >
+        <p className="text-[#9C8E7C] text-xs">
+          © 2026 AURA Career Fair · MTU Students' Representative Council
+        </p>
+        <p className="text-[#9C8E7C] text-xs">
+          May 11, 2026 · Ogun State, Nigeria
+        </p>
+      </div>
+
     </footer>
   );
 }
