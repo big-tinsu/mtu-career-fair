@@ -1,6 +1,6 @@
 export type EventStatus = 'upcoming' | 'live' | 'past';
 export type PartnerTier = 'platinum' | 'gold' | 'silver' | 'media';
-export type SpeakerType = 'keynote' | 'speaker' | 'panelist' | 'host';
+export type SpeakerType = 'keynote' | 'speaker' | 'panelist' | 'host' | 'moderator' | 'spotlight';
 export type RegistrationStatus = 'pending' | 'approved' | 'rejected' | 'waitlisted';
 export type AgendaItemType = 'main' | 'break' | 'networking' | 'workshop' | 'keynote';
 

@@ -9,12 +9,13 @@ import { HeroSection } from '@/presentation/sections/HeroSection';
 import { AboutSection } from '@/presentation/sections/AboutSection';
 import { ExpectSection } from '@/presentation/sections/ExpectSection';
 import { SpeakersSection } from '@/presentation/sections/SpeakersSection';
+import { ModeratorSection } from '@/presentation/sections/ModeratorSection';
+import { SpotlightSection } from '@/presentation/sections/SpotlightSection';
 import { TestimonialsSection } from '@/presentation/sections/TestimonialsSection';
 import { PartnersSection } from '@/presentation/sections/PartnersSection';
 import { TechieAcademySection } from '@/presentation/sections/TechieAcademySection';
 import { FAQSection } from '@/presentation/sections/FAQSection';
 import { RegistrationCTASection } from '@/presentation/sections/RegistrationCTASection';
-import { eventStats } from '@/constants/eventData';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -42,19 +43,24 @@ export default async function EventPage({ params }: PageProps) {
   const event = await fetchEventBySlug(slug);
   if (!event) notFound();
 
-  const [speakers, partners] = await Promise.all([
+  const [allSpeakers, partners] = await Promise.all([
     fetchSpeakers(event.id),
     fetchPartners(event.id),
   ]);
+
+  const panelists = allSpeakers.filter(s => s.type === 'panelist' || s.type === 'keynote' || s.type === 'speaker');
+  const moderator = allSpeakers.find(s => s.type === 'moderator') ?? null;
+  const spotlight = allSpeakers.find(s => s.type === 'spotlight') ?? null;
 
   return (
     <div className="min-h-screen bg-[#F2E4CC] text-[#1A1A1A]">
       <Navbar event={event} />
       <main>
         <HeroSection event={event} />
-        {/* <StatsSection stats={eventStats} /> */}
         <AboutSection event={event} />
-        <SpeakersSection speakers={speakers} />
+        <SpeakersSection speakers={panelists} />
+        {moderator && <ModeratorSection moderator={moderator} />}
+        {spotlight && <SpotlightSection speaker={spotlight} />}
         <ExpectSection />
         <PartnersSection partners={partners} />
         <TechieAcademySection />

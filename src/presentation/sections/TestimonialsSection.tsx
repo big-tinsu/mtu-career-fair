@@ -6,7 +6,7 @@ import { motion, useScroll, useTransform, MotionValue } from 'framer-motion';
 const CARDS = [
   {
     name: 'Daniel Olatinsu',
-    username: '@danielcodes',
+    username: '@tinsu',
     initials: 'DO',
     color: '#226C3D',
     text: 'I’m really looking forward to this first edition of the AURA Career Fair. Feels like something MTU actually needs right now.',
@@ -22,7 +22,7 @@ const CARDS = [
   },
   {
     name: 'M.O',
-    username: '@mo_insights',
+    username: '@mo_',
     initials: 'MO',
     color: '#1A5430',
     text: 'I’m hoping this creates a real bridge between students and industry. That’s been missing for a while.',
@@ -30,7 +30,7 @@ const CARDS = [
   },
   {
     name: 'Flourish Joshua',
-    username: '@flourishcodes',
+    username: '@fjspeaks',
     initials: 'FJ',
     color: '#226C3D',
     text: 'The speaker lineup looks solid. I’m hoping the panel sessions are actually practical and not just vibes.',
