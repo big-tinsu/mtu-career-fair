@@ -32,7 +32,7 @@ Join us for expert panel discussions, direct engagement with recruiters and indu
   },
   socialLinks: {
     instagram: 'https://instagram.com/src_mountaintopuniversity',
-    twitter: 'https://twitter.com/mountaintopuni',
+    // twitter: 'https://twitter.com/mountaintopuni',
   },
 };
 

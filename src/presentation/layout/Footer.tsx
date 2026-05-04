@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { FiInstagram, FiTwitter } from 'react-icons/fi';
+import { FiInstagram } from 'react-icons/fi';
 import { EventEntity } from '@/domain/types';
 
 interface FooterProps {
@@ -67,7 +67,7 @@ export function Footer({ event }: FooterProps) {
                 <FiInstagram size={16} /> Instagram
               </a>
             )}
-            {event.socialLinks?.twitter && (
+            {/* {event.socialLinks?.twitter && (
               <a
                 href={event.socialLinks.twitter}
                 target="_blank"
@@ -76,7 +76,7 @@ export function Footer({ event }: FooterProps) {
               >
                 <FiTwitter size={16} /> Twitter
               </a>
-            )}
+            )} */}
           </div>
         </div>
 
