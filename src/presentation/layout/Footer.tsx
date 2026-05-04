@@ -89,7 +89,7 @@ export function Footer({ event }: FooterProps) {
             <div className="flex gap-3">
               <input
                 type="text"
-                placeholder="First Name"
+                placeholder="Full Name"
                 value={firstName}
                 onChange={e => setFirstName(e.target.value)}
                 className="flex-1 bg-white border-2 border-[#D5C9B3] rounded-full px-5 py-3.5 text-sm text-[#1A1A1A] placeholder:text-[#9C8E7C] focus:outline-none focus:border-[#226C3D] transition-colors"
