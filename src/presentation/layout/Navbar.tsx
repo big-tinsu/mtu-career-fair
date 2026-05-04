@@ -52,7 +52,7 @@ export function Navbar({ event }: NavbarProps) {
           'fixed top-0 left-0 right-0 z-50 transition-all duration-500',
           scrolled
             ? 'bg-[#F2E4CC]/95 backdrop-blur-xl border-b border-[#E3D4B5] shadow-[0_6px_24px_rgba(28,28,28,0.12)]'
-            : 'bg-[#F2E4CC] border-b border-[#E3D4B5]',
+            : 'bg-transparent ',
         )}
       >
         <div className="grid grid-cols-3 items-center px-5 sm:px-8 md:px-12 lg:px-16 h-16 md:h-20">

@@ -44,7 +44,7 @@ export function HeroSection({ event }: HeroSectionProps) {
             transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
             className="font-instrument italic text-[26vw] md:text-[22vw] lg:text-[18vw] xl:text-[16vw] leading-[0.82] tracking-tight text-[#1A5430] select-none"
           >
-            AURA
+            Beyond The Degree
           </motion.h1>
         </div> */}
 
