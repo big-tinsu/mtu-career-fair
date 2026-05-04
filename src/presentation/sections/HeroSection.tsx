@@ -31,39 +31,7 @@ export function HeroSection({ event }: HeroSectionProps) {
   return (
     <section className="min-h-screen bg-[url('/images/bg-image.jpeg')] bg-cover bg-center bg-no-repeat flex flex-col relative overflow-hidden">
 
-      {/* Left decorative arcs */}
-      <div className="absolute left-0 top-1/2 -translate-y-1/2 pointer-events-none select-none">
-        {leftArcs.map(({ size, color, thickness }, i) => (
-          <div
-            key={i}
-            className="absolute rounded-full"
-            style={{
-              width: size,
-              height: size,
-              border: `${thickness}px solid ${color}`,
-              left: -size / 2,
-              top: -size / 2,
-            }}
-          />
-        ))}
-      </div>
-
-      {/* Right decorative arcs */}
-      <div className="absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none select-none">
-        {rightArcs.map(({ size, color, thickness }, i) => (
-          <div
-            key={i}
-            className="absolute rounded-full"
-            style={{
-              width: size,
-              height: size,
-              border: `${thickness}px solid ${color}`,
-              right: -size / 2,
-              top: -size / 2,
-            }}
-          />
-        ))}
-      </div>
+      
 
       {/* Main content */}
       <div className="relative flex-1 flex flex-col items-center justify-center px-6 md:px-12 text-center pt-32 pb-20">

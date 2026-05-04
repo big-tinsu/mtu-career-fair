@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import './styles/globals.css';
 import { Providers } from './providers';
+import { MobileBlock } from '@/presentation/components/MobileBlock';
 
 const inter = localFont({
   src: '../../public/fonts/inter-var-latin.woff2',
@@ -44,7 +45,10 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         />
       </head>
       <body className={`${inter.variable} antialiased bg-[#F2E4CC] text-[#1A1A1A]`}>
-        <Providers>{children}</Providers>
+        <MobileBlock />
+        <div className="hidden md:block">
+          <Providers>{children}</Providers>
+        </div>
       </body>
     </html>
   );
