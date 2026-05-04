@@ -8,6 +8,7 @@ import { FiArrowRight } from 'react-icons/fi';
 import { SpeakerEntity } from '@/domain/types';
 import { viewportConfig } from '@/lib/animations';
 import { SpeakerPanel } from '../ui/SpeakerPanel';
+import { RegisterButton } from '../ui/RegisterButton';
 import { getInitials } from '@/lib/utils';
 
 interface SpeakersSectionProps {
@@ -25,8 +26,8 @@ const cardStyles = [
 const cornerPos = ['-top-2 -left-2', '-top-2 -right-2', '-bottom-2 -left-2', '-bottom-2 -right-2'] as const;
 
 // speakerIdx -1 = text block cell
-const COLUMNS: { speakerIdx: number; styleIdx: number }[][] = [
-  [{ speakerIdx: -1, styleIdx: -1 }, { speakerIdx: 3, styleIdx: 3 }],
+const COLUMNS: { speakerIdx: number; styleIdx: number; offsetTop?: number }[][] = [
+  [{ speakerIdx: -1, styleIdx: -1 }, { speakerIdx: 3, styleIdx: 3, offsetTop: 80 }],
   [{ speakerIdx: 0, styleIdx: 0 }, { speakerIdx: 2, styleIdx: 2 }],
   [{ speakerIdx: 1, styleIdx: 1 }, { speakerIdx: 4, styleIdx: 4 }],
 ];
@@ -172,7 +173,7 @@ export function SpeakersSection({ speakers }: SpeakersSectionProps) {
               className="flex-1 flex flex-col gap-16"
               style={{ paddingTop: COLUMN_TOPS[ci] }}
             >
-              {col.map(({ speakerIdx, styleIdx }, ri) => {
+              {col.map(({ speakerIdx, styleIdx, offsetTop }, ri) => {
 
                 if (speakerIdx === -1) {
                   return (
@@ -197,15 +198,7 @@ export function SpeakersSection({ speakers }: SpeakersSectionProps) {
                       <p className="text-[#5C5046] text-sm leading-relaxed mb-8">
                         Industry leaders, entrepreneurs, and executives sharing real stories from the frontlines of career success.
                       </p>
-                      <Link href="register">
-                        <motion.button
-                          whileHover={{ scale: 1.02 }}
-                          whileTap={{ scale: 0.98 }}
-                          className="flex items-center gap-2.5 bg-[#226C3D] text-[#F2E4CC] font-bold text-sm px-6 py-3.5 rounded-full"
-                        >
-                          Register Free <FiArrowRight size={14} />
-                        </motion.button>
-                      </Link>
+                      <RegisterButton label="Register Free" size="md" />
                     </motion.div>
                   );
                 }
@@ -213,14 +206,15 @@ export function SpeakersSection({ speakers }: SpeakersSectionProps) {
                 const speaker = speakers[speakerIdx];
                 if (!speaker) return null;
                 return (
-                  <SpeakerCard
-                    key={speaker.id}
-                    speaker={speaker}
-                    styleIdx={styleIdx}
-                    colIdx={ci}
-                    rowIdx={ri}
-                    onClick={() => setSelected(speaker)}
-                  />
+                  <div key={speaker.id} style={offsetTop ? { marginTop: offsetTop } : undefined}>
+                    <SpeakerCard
+                      speaker={speaker}
+                      styleIdx={styleIdx}
+                      colIdx={ci}
+                      rowIdx={ri}
+                      onClick={() => setSelected(speaker)}
+                    />
+                  </div>
                 );
               })}
             </div>

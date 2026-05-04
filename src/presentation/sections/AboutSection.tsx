@@ -25,13 +25,13 @@ const TOP_BARS = [
 const LEFT_PHOTOS = [
   { src: '/images/speakers/speaker.jpeg',  top: -20,  left: -30, w: 190, h: 165, rotate: -5, accent: '#C9A227' },
   { src: '/images/speakers/speaker2.jpeg', top: 220,  left: -20, w: 200, h: 215, rotate: -2, accent: '#226C3D' },
-  { src: '/images/speakers/speaker3.jpg',  top: 440,  left: -25, w: 185, h: 190, rotate: 4,  accent: '#F2E4CC' },
+  // { src: '/images/speakers/speaker3.jpg',  top: 440,  left: -25, w: 185, h: 190, rotate: 4,  accent: '#F2E4CC' },
 ];
 
 const RIGHT_PHOTOS = [
   { src: '/images/speakers/speaker4.JPG',  top: -15, right: -25, w: 200, h: 180, rotate: 4,  accent: '#226C3D' },
   { src: '/images/speakers/speaker5.jpg',  top: 210, right: -15, w: 200, h: 215, rotate: -3, accent: '#C9A227' },
-  { src: '/images/imageone.jpeg',          top: 440, right: -30, w: 185, h: 190, rotate: 5,  accent: '#F2E4CC' },
+  // { src: '/images/imageone.jpeg',          top: 440, right: -30, w: 185, h: 190, rotate: 5,  accent: '#F2E4CC' },
 ];
 
 const DIAG_BARS = [

@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { EventEntity } from '@/domain/types';
 import { cn } from '@/lib/utils';
+import { REGISTER_URL } from '../ui/RegisterButton';
 
 interface NavbarProps {
   event: EventEntity;
@@ -14,7 +15,7 @@ const navLinks = [
   { label: 'About', href: '#about', isAnchor: true },
   { label: 'Speakers', href: '#speakers', isAnchor: true },
   { label: 'Partners', href: '#partners', isAnchor: true },
-  { label: 'Register', href: 'register', isAnchor: false },
+  { label: 'Register', href: REGISTER_URL, isAnchor: false },
 ];
 
 const primaryLinks = navLinks.filter((link) => link.isAnchor);
@@ -90,10 +91,10 @@ export function Navbar({ event }: NavbarProps) {
           {/* Right: Register CTA */}
           <div className="flex justify-end">
             <Link
-              href={'https://luma.com/j281yy78'}
+              href={REGISTER_URL}
               className="inline-flex items-center rounded-full border-2 border-[#1A1A1A] bg-[#226C3D] px-5 py-2 text-xs font-bold uppercase tracking-[0.2em] text-[#F2E4CC] shadow-[0_4px_0_#1A1A1A] transition-transform hover:-translate-y-0.5"
             >
-              Buy Tickets
+              Register
             </Link>
           </div>
         </div>
@@ -133,8 +134,10 @@ export function Navbar({ event }: NavbarProps) {
                       </span>
                     </button>
                   ) : (
-                    <Link
-                      href={`/events/${event.slug}/${href}`}
+                    <a
+                      href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       onClick={() => setMenuOpen(false)}
                       className="w-full text-left py-5 md:py-6 group flex items-center justify-between"
                     >
@@ -144,7 +147,7 @@ export function Navbar({ event }: NavbarProps) {
                       <span className="text-[#226C3D] text-2xl md:text-3xl group-hover:translate-x-1 transition-transform">
                         →
                       </span>
-                    </Link>
+                    </a>
                   )}
                 </motion.div>
               ))}

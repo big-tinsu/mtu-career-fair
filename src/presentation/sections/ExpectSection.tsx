@@ -5,9 +5,9 @@ import { viewportConfig } from '@/lib/animations';
 
 const experiences = [
   { label: 'Expert Panel Talks',     bg: '#216C3D', light: false },
-  { label: 'Career Networking',       bg: '#F5EFE3', light: true  },
+  { label: 'Career Networking',       bg: '#C9A226', light: false  },
   { label: 'CV Review Sessions',      bg: '#216C3D', light: false },
-  { label: 'Recruiter Direct Access', bg: '#F5EFE3', light: true  },
+  { label: 'Recruiter Direct Access', bg: '#C9A226', light: false  },
   { label: 'Graduate Opportunities',  bg: '#216C3D', light: false },
 ];
 
@@ -49,12 +49,12 @@ export function ExpectSection() {
             fontSize: 'clamp(1.8rem, 3.5vw, 3.2rem)',
           }}
         >
-          What to<br />Experience
+          What to<br />Expect
         </motion.p>
       </div>
 
       {/* ── Right side — stacked rows ── */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col" style={{ paddingTop: CURVE_H, paddingBottom: CURVE_H }}>
         {experiences.map(({ label, bg, light }, i) => (
           <motion.div
             key={label}
@@ -84,7 +84,7 @@ export function ExpectSection() {
               style={{
                 fontFamily: '"Instrument Serif", Georgia, serif',
                 fontStyle: 'italic',
-                fontSize: 'clamp(2rem, 5vw, 4.5rem)',
+                fontSize: 'clamp(1.6rem, 4vw, 3.5rem)',
                 color: light ? '#1A1A1A' : '#ffffff',
               }}
             >

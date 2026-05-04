@@ -1,8 +1,8 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import Link from 'next/link';
 import { EventEntity } from '@/domain/types';
+import { REGISTER_URL } from '../ui/RegisterButton';
 
 interface Props {
   event: EventEntity;
@@ -104,15 +104,16 @@ export function RegistrationCTASection({ event }: Props) {
                 transition={{ duration: 0.6, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
                 className="relative z-10"
               >
-                <Link href="register">
-                  <motion.button
-                    whileHover={{ scale: 1.04, backgroundColor: '#ffffff' }}
-                    whileTap={{ scale: 0.97 }}
-                    className="bg-[#F2E4CC] text-[#1A5430] font-bold px-10 py-4 rounded-full text-base transition-colors"
-                  >
-                    Register Free — It&apos;s Today
-                  </motion.button>
-                </Link>
+                <motion.a
+                  href={REGISTER_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ scale: 1.04, backgroundColor: '#ffffff' }}
+                  whileTap={{ scale: 0.97 }}
+                  className="bg-[#F2E4CC] text-[#1A5430] font-bold px-10 py-4 rounded-full text-base transition-colors inline-block"
+                >
+                  Register Free — It&apos;s Today
+                </motion.a>
               </motion.div>
 
             </div>

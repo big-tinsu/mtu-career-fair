@@ -72,25 +72,62 @@ export function TechieAcademySection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={viewportConfig}
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-          className="flex flex-col lg:flex-row items-center justify-between gap-8"
+          className="flex flex-col lg:flex-row items-start gap-8"
+          style={{ gap: 'clamp(2rem, 5vw, 4rem)' }}
         >
-          {/* Left: Image Card */}
-          <div className='flex-1 max-w-[500px] mx-auto lg:mx-0'>
-            <div className='rounded-[28px] border-2 border-[#1A1A1A] bg-white p-3 md:p-4 shadow-[0_12px_0_#1A1A1A] rotate-[-2deg] transition-transform hover:rotate-0 duration-300 w-full'>
-              <div className='rounded-[22px] overflow-hidden bg-[#226C3D]/10 border border-[#1A1A1A]/10 w-full h-[400px]'>
-                <img
-                  src='/images/techie-partnership.jpeg'
-                  alt='Techie Academy partnership'
-                  className='w-full h-full object-cover'
-                />
+          {/* Left: Image — matches FAQ style */}
+          <motion.div
+            className="hidden md:block flex-shrink-0"
+            style={{ width: '38%', position: 'sticky', top: '7rem' }}
+            initial={{ opacity: 0, x: -32 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={viewportConfig}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <div
+              style={{
+                position: 'relative',
+                borderRadius: 28,
+                overflow: 'hidden',
+                aspectRatio: '3/4',
+                border: '3px solid #1A1A1A',
+                boxShadow: '6px 6px 0 #1A1A1A',
+              }}
+            >
+              <Image
+                src="/images/techie-partnership.jpeg"
+                alt="Techie Academy partnership"
+                fill
+                className="object-cover"
+                sizes="40vw"
+              />
+              {/* Gold label overlay */}
+              <div
+                className="absolute bottom-5 left-5"
+                style={{
+                  backgroundColor: '#C9A227',
+                  borderRadius: 8,
+                  padding: '6px 14px',
+                }}
+              >
+                <span
+                  style={{
+                    fontFamily: '"Instrument Serif", Georgia, serif',
+                    fontStyle: 'italic',
+                    fontSize: '1.05rem',
+                    color: '#F2E4CC',
+                  }}
+                >
+                  Techie Academy
+                </span>
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Right: Manual Video Slider */}
-          <div className='flex-1 w-full mx-auto lg:mx-0'>
-            <div className="relative mx-auto lg:mx-0 max-w-[500px] rounded-[26px] border-2 border-[#1A1A1A] bg-white shadow-[0_10px_0_#1A1A1A]">
-                  <div className='relative bg-[#1A1A1A] h-[400px] flex items-center justify-center'>
+          <div className='flex-1 basis-1/2 w-full mx-auto lg:mx-0'>
+            <div className="relative mx-auto lg:mx-0 rounded-none border-2 border-[#1A1A1A] bg-white shadow-[0_10px_0_#1A1A1A]">
+                  <div className='relative bg-[#1A1A1A] h-[500px] flex items-center justify-center'>
                     <video
                       className='max-h-full max-w-full object-contain'
                       src={VIDEOS[activeIndex].src}

@@ -2,9 +2,9 @@
 
 import { motion } from 'framer-motion';
 import Image from 'next/image';
-import Link from 'next/link';
 import { PartnerEntity } from '@/domain/types';
 import { viewportConfig } from '@/lib/animations';
+import { RegisterButton } from '../ui/RegisterButton';
 
 interface PartnersSectionProps {
   partners: PartnerEntity[];
@@ -181,16 +181,7 @@ export function PartnersSection({ partners }: PartnersSectionProps) {
             Industry-leading organisations supporting the next generation of Nigerian professionals.
           </p>
 
-          <Link href="register">
-            <motion.button
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-              className="flex items-center gap-2.5 bg-[#226C3D] text-[#F2E4CC] font-bold text-sm px-7 py-3.5 rounded-full w-fit"
-              style={{ boxShadow: '0 4px 0 #1A5430' }}
-            >
-              Register Free →
-            </motion.button>
-          </Link>
+          <RegisterButton label="Register Free →" showArrow={false} size="md" />
         </motion.div>
 
         {/* ── Right: 3×2 colorful grid ── */}
