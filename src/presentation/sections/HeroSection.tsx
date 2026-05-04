@@ -13,19 +13,6 @@ const tickerItems = [
   'MAY 11', 'FREE ENTRY', 'MTU MULTI-PURPOSE HALL', 'NETWORKING',
 ];
 
-const leftArcs = [
-  { size: 680, color: '#1A5430', thickness: 22 },
-  { size: 530, color: '#226C3D', thickness: 22 },
-  { size: 380, color: '#3D9960', thickness: 22 },
-  { size: 230, color: '#5BBF7A', thickness: 22 },
-];
-
-const rightArcs = [
-  { size: 680, color: '#7A5217', thickness: 22 },
-  { size: 530, color: '#B07A28', thickness: 22 },
-  { size: 380, color: '#D4A044', thickness: 22 },
-  { size: 230, color: '#EFC068', thickness: 22 },
-];
 
 export function HeroSection({ event }: HeroSectionProps) {
   return (

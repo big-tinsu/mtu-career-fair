@@ -8,7 +8,7 @@ interface Props {
   event: EventEntity;
 }
 
-export function RegistrationCTASection({ event }: Props) {
+export function RegistrationCTASection({ event: _event }: Props) {
   return (
     <section
       className="flex items-center justify-center"

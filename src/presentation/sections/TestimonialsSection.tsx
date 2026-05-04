@@ -47,7 +47,6 @@ const CARDS = [
 ];
 
 const N = CARDS.length;
-const BASE_TOP   = 80;
 const CARD_OFFSET = 40;
 
 // Slight rotation per card for the playful scattered feel

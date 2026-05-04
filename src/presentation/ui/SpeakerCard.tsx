@@ -13,10 +13,12 @@ interface SpeakerCardProps {
 }
 
 const typeConfig: Record<SpeakerType, { label: string; variant: 'green' | 'gold' | 'blue' | 'cream' }> = {
-  keynote: { label: 'Keynote', variant: 'gold' },
-  speaker: { label: 'Speaker', variant: 'green' },
-  panelist: { label: 'Panelist', variant: 'green' },
-  host: { label: 'Host', variant: 'cream' },
+  keynote:   { label: 'Keynote',   variant: 'gold'  },
+  speaker:   { label: 'Speaker',   variant: 'green' },
+  panelist:  { label: 'Panelist',  variant: 'green' },
+  host:      { label: 'Host',      variant: 'cream' },
+  moderator: { label: 'Moderator', variant: 'cream' },
+  spotlight: { label: 'Spotlight', variant: 'gold'  },
 };
 
 const avatarColors = [
