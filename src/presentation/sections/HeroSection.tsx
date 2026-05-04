@@ -2,9 +2,7 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { FiArrowRight } from 'react-icons/fi';
 import { EventEntity } from '@/domain/types';
-import { formatDate } from '@/lib/utils';
 
 interface HeroSectionProps {
   event: EventEntity;
@@ -15,122 +13,143 @@ const tickerItems = [
   'MAY 11', 'FREE ENTRY', 'MTU MULTI-PURPOSE HALL', 'NETWORKING',
 ];
 
+const leftArcs = [
+  { size: 680, color: '#1A5430', thickness: 22 },
+  { size: 530, color: '#226C3D', thickness: 22 },
+  { size: 380, color: '#3D9960', thickness: 22 },
+  { size: 230, color: '#5BBF7A', thickness: 22 },
+];
+
+const rightArcs = [
+  { size: 680, color: '#7A5217', thickness: 22 },
+  { size: 530, color: '#B07A28', thickness: 22 },
+  { size: 380, color: '#D4A044', thickness: 22 },
+  { size: 230, color: '#EFC068', thickness: 22 },
+];
+
 export function HeroSection({ event }: HeroSectionProps) {
   return (
     <section className="min-h-screen bg-[url('/images/bg-image.jpeg')] bg-cover bg-center bg-no-repeat flex flex-col relative overflow-hidden">
-      {/* Radial glows */}
-      <div className="absolute inset-0 pointer-events-none select-none">
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[600px] rounded-full bg-[#2D7A4F]/25 blur-[140px]" />
-        <div className="absolute bottom-0 right-0 w-[400px] h-[400px] rounded-full bg-[#226C3D]/20 blur-[100px]" />
+
+      {/* Left decorative arcs */}
+      <div className="absolute left-0 top-1/2 -translate-y-1/2 pointer-events-none select-none">
+        {leftArcs.map(({ size, color, thickness }, i) => (
+          <div
+            key={i}
+            className="absolute rounded-full"
+            style={{
+              width: size,
+              height: size,
+              border: `${thickness}px solid ${color}`,
+              left: -size / 2,
+              top: -size / 2,
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Right decorative arcs */}
+      <div className="absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none select-none">
+        {rightArcs.map(({ size, color, thickness }, i) => (
+          <div
+            key={i}
+            className="absolute rounded-full"
+            style={{
+              width: size,
+              height: size,
+              border: `${thickness}px solid ${color}`,
+              right: -size / 2,
+              top: -size / 2,
+            }}
+          />
+        ))}
       </div>
 
       {/* Main content */}
-      <div className="relative flex-1 flex flex-col justify-center px-6 md:px-12 lg:px-20 xl:px-28 pt-32 pb-16">
-        {/* Label */}
-        {/* <motion.p
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          className="text-[#1A5430] text-[10px] md:text-xs tracking-[0.35em] uppercase mb-6 md:mb-8 font-medium"
-        >
-          Mountain Top University × SRC Present
-        </motion.p> */}
+      <div className="relative flex-1 flex flex-col items-center justify-center px-6 md:px-12 text-center pt-32 pb-20">
 
-        {/* AURA */}
-        {/* <div className="overflow-hidden mb-1 md:mb-2">
-          <motion.h1
-            initial={{ y: '110%' }}
-            animate={{ y: 0 }}
-            transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-            className="font-instrument italic text-[26vw] md:text-[22vw] lg:text-[18vw] xl:text-[16vw] leading-[0.82] tracking-tight text-[#1A5430] select-none"
-          >
-            Beyond The Degree
-          </motion.h1>
-        </div> */}
-
-        {/* Career Fair 2026 */}
-        {/* <div className="overflow-hidden mb-8 md:mb-10">
-          <motion.div
-            initial={{ y: '110%' }}
-            animate={{ y: 0 }}
-            transition={{ duration: 0.95, ease: [0.16, 1, 0.3, 1], delay: 0.38 }}
-            className="flex flex-wrap items-baseline gap-3 md:gap-5"
-          >
-            <span className="font-instrument italic text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-[#F2E4CC]/70 leading-none">
-              Career Fair
-            </span>
-            <span className="font-bold text-xl md:text-2xl text-[#4CAF70] leading-none tracking-tight">
-              2026
-            </span>
-          </motion.div>
-        </div> */}
-
-        {/* Tagline */}
+        {/* Date badge */}
         <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.7, delay: 0.7, ease: [0.16, 1, 0.3, 1] }}
-          className="flex items-center gap-4 mb-8 md:mb-10"
+          initial={{ opacity: 0, y: -16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          className="flex items-center gap-2.5 mb-10"
         >
-          <div className="h-px w-8 bg-[#F2E4CC]/25 flex-shrink-0" />
-          <p className="font-instrument italic text-base md:text-lg text-[#F2E4CC]/50">
-            &ldquo;{event.subtitle}&rdquo;
-          </p>
+          <div className="w-9 h-9 rounded-full bg-[#226C3D] flex items-center justify-center flex-shrink-0">
+            <span className="text-[#F2E4CC] text-sm leading-none">✦</span>
+          </div>
+          <span className="bg-[#226C3D] text-[#F2E4CC] text-sm md:text-base font-semibold px-5 py-2 rounded-full">
+            Monday, 11th May · MTU Multi-Purpose Hall
+          </span>
         </motion.div>
 
-        {/* Event meta */}
+        {/* Main heading */}
+        <div className="overflow-hidden mb-6">
+          <motion.h1
+            initial={{ y: '105%' }}
+            animate={{ y: 0 }}
+            transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1], delay: 0.18 }}
+            className="font-black leading-[0.9] tracking-tight max-w-4xl mx-auto"
+            style={{
+              fontSize: 'clamp(2.8rem, 8.5vw, 7rem)',
+              color: '#F2E4CC',
+              WebkitTextStroke: '2.5px #1A1A1A',
+              paintOrder: 'stroke fill',
+              textShadow: '5px 7px 0px rgba(26,26,26,0.16)',
+            } as React.CSSProperties}
+          >
+            Careers, connections,
+            <br />
+            and limitless futures.
+          </motion.h1>
+        </div>
+
+        {/* Subtitle pill */}
         <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.9 }}
-          className="flex flex-wrap gap-x-0 gap-y-2 mb-10 md:mb-12"
+          initial={{ opacity: 0, scale: 0.88 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.65, delay: 0.48, ease: [0.16, 1, 0.3, 1] }}
+          className="mb-12"
         >
-          {[
-            formatDate(event.date),
-            `${event.time} – ${event.endTime}`,
-            event.location,
-            'Ogun State, Nigeria',
-          ].map((detail, i) => (
-            <span key={i} className="text-[#F2E4CC]/40 text-xs md:text-sm flex items-center">
-              {i > 0 && <span className="mx-3 opacity-40">·</span>}
-              {detail}
-            </span>
-          ))}
+          <span
+            className="inline-block bg-[#226C3D] text-[#F2E4CC] font-bold px-7 py-2.5 rounded-lg font-instrument italic"
+            style={{ fontSize: 'clamp(1.05rem, 2.4vw, 1.45rem)' }}
+          >
+            AURA Career Fair is here.
+          </span>
         </motion.div>
 
         {/* CTAs */}
-        {/* <motion.div
-          initial={{ opacity: 0, y: 16 }}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 1.1 }}
-          className="flex flex-wrap items-center gap-3 md:gap-4"
+          transition={{ duration: 0.6, delay: 0.72 }}
+          className="flex flex-wrap items-center justify-center gap-3"
         >
           <Link href={`/events/${event.slug}/register`}>
             <motion.button
-              whileHover={{ scale: 1.02, backgroundColor: '#fff' }}
-              whileTap={{ scale: 0.98 }}
-              className="flex items-center gap-2.5 bg-[#F2E4CC] text-[#1A5430] font-bold text-sm px-8 py-4 rounded-full transition-colors"
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              className="bg-[#1A5430] text-[#F2E4CC] font-bold text-sm px-8 py-4 rounded-full transition-colors hover:bg-[#0D3B22]"
             >
-              Register Now — Free
-              <FiArrowRight size={15} />
+              Register Now — Free Entry
             </motion.button>
           </Link>
           <motion.a
             href="#about"
-            whileHover={{ color: 'rgba(242,228,204,0.9)' }}
-            className="flex items-center gap-2 text-[#F2E4CC]/50 hover:text-[#F2E4CC]/80 text-sm font-medium transition-colors border border-[#F2E4CC]/15 px-6 py-4 rounded-full hover:border-[#F2E4CC]/30"
+            className="text-[#1A5430]/60 hover:text-[#1A5430] text-sm font-medium border border-[#1A5430]/25 hover:border-[#1A5430]/50 px-6 py-4 rounded-full transition-colors"
           >
             Learn more
           </motion.a>
-        </motion.div> */}
+        </motion.div>
       </div>
 
-      {/* Scrolling ticker band */}
+      {/* Scrolling ticker */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 1.5, duration: 0.6 }}
-        className="relative z-10 border-t border-[#F2E4CC]/10 bg-[#F2E4CC]/5 overflow-hidden py-3"
+        transition={{ delay: 1.2, duration: 0.6 }}
+        className="relative z-10 border-t border-[#1A1A1A]/10 bg-[#1A1A1A]/5 overflow-hidden py-3"
       >
         <div
           className="flex whitespace-nowrap"
@@ -139,7 +158,7 @@ export function HeroSection({ event }: HeroSectionProps) {
           {[...tickerItems, ...tickerItems, ...tickerItems, ...tickerItems].map((item, i) => (
             <span
               key={i}
-              className="flex-shrink-0 text-[#F2E4CC]/30 text-[10px] font-bold uppercase tracking-[0.35em] mx-6"
+              className="flex-shrink-0 text-[#1A1A1A]/35 text-[10px] font-bold uppercase tracking-[0.35em] mx-6"
             >
               {item}
               {i % tickerItems.length !== tickerItems.length - 1 && (
