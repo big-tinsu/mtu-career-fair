@@ -3,8 +3,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
-import Link from 'next/link';
-import { FiArrowRight } from 'react-icons/fi';
 import { SpeakerEntity } from '@/domain/types';
 import { viewportConfig } from '@/lib/animations';
 import { SpeakerPanel } from '../ui/SpeakerPanel';

@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { FiInstagram } from 'react-icons/fi';
 import { EventEntity } from '@/domain/types';
@@ -10,13 +9,6 @@ interface FooterProps {
   event: EventEntity;
 }
 
-const SPEAKER_PHOTOS = [
-  { src: '/images/speakers/speaker.jpeg',  name: 'Speaker 1', h: 220, color: '#226C3D' },
-  { src: '/images/speakers/speaker2.jpeg', name: 'Speaker 2', h: 290, color: '#8B6914' },
-  { src: '/images/speakers/speaker3.jpg',  name: 'Speaker 3', h: 250, color: '#1A5430' },
-  { src: '/images/speakers/speaker4.JPG',  name: 'Speaker 4', h: 310, color: '#4A7C3F' },
-  { src: '/images/speakers/speaker5.jpg',  name: 'Speaker 5', h: 260, color: '#226C3D' },
-];
 
 export function Footer({ event }: FooterProps) {
   const [firstName, setFirstName] = useState('');
@@ -151,7 +143,7 @@ export function Footer({ event }: FooterProps) {
         style={{ padding: '1rem clamp(2rem, 6vw, 5rem)' }}
       >
         <p className="text-[#9C8E7C] text-xs">
-          © 2026 AURA Career Fair · MTU Students' Representative Council
+          © 2026 AURA Career Fair · MTU Students&apos; Representative Council
         </p>
         <p className="text-[#9C8E7C] text-xs">
           May 11, 2026 · Ogun State, Nigeria
