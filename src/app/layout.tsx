@@ -38,6 +38,10 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap"
           rel="stylesheet"
         />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Anton&display=swap"
+          rel="stylesheet"
+        />
       </head>
       <body className={`${inter.variable} antialiased bg-[#F2E4CC] text-[#1A1A1A]`}>
         <Providers>{children}</Providers>

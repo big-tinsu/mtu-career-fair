@@ -18,7 +18,7 @@ export function ExpectSection() {
   return (
     <section
       className="flex relative"
-      style={{ minHeight: '75vh' }}
+      style={{ minHeight: '75vh'}}
     >
       {/* Top inverted curve — beige arch pointing down into the section */}
       <div

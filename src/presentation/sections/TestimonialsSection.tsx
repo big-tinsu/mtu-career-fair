@@ -5,43 +5,43 @@ import { motion, useScroll, useTransform, MotionValue } from 'framer-motion';
 
 const CARDS = [
   {
-    name: 'Chisom Adaeze',
-    username: '@chisomwrites',
-    initials: 'CA',
+    name: 'Daniel Olatinsu',
+    username: '@danielcodes',
+    initials: 'DO',
     color: '#226C3D',
-    text: 'AURA Career Fair completely changed how I approached my job search. Landed 3 interviews within a week of attending. Best event of 2026 🔥',
+    text: 'I’m really looking forward to this first edition of the AURA Career Fair. Feels like something MTU actually needs right now.',
     time: '9:14 AM · May 12, 2026',
   },
   {
-    name: 'Tunde Afolabi',
-    username: '@tunde_builds',
-    initials: 'TA',
+    name: 'Abejoye Favour',
+    username: '@favour_abejoye',
+    initials: 'AF',
     color: '#8B6914',
-    text: 'The CV clinic was INSANE. A recruiter rewrote my entire summary in 5 minutes — my callback rate tripled after. 100% recommend 🚀',
+    text: 'Looking forward to the networking sessions. Hopefully I can leave with something tangible.',
     time: '11:32 AM · May 12, 2026',
   },
   {
-    name: 'Blessing Eze',
-    username: '@blessingeze_',
-    initials: 'BE',
+    name: 'M.O',
+    username: '@mo_insights',
+    initials: 'MO',
     color: '#1A5430',
-    text: 'Shook hands with 4 company reps at AURA and walked away with an internship offer the same day. No cap 💼',
+    text: 'I’m hoping this creates a real bridge between students and industry. That’s been missing for a while.',
     time: '2:07 PM · May 12, 2026',
   },
   {
-    name: 'Emeka Okafor',
-    username: '@emekacodes',
-    initials: 'EO',
+    name: 'Flourish Joshua',
+    username: '@flourishcodes',
+    initials: 'FJ',
     color: '#226C3D',
-    text: 'The panel talk was worth more than a full semester of lectures. MTU really cooked with this one 🎯',
+    text: 'The speaker lineup looks solid. I’m hoping the panel sessions are actually practical and not just vibes.',
     time: '3:55 PM · May 12, 2026',
   },
   {
-    name: 'Fadeke Adesanya',
-    username: '@fadeketalks',
-    initials: 'FA',
+    name: 'Ayeni Busola',
+    username: '@busolatalks',
+    initials: 'AB',
     color: '#4A7C3F',
-    text: "Been to career fairs before. AURA is on a completely different level — the energy, the connections, the speakers. Don't sleep ✨",
+    text: 'I’m particularly interested in the structure of the event and the opportunities it presents for meaningful engagement.',
     time: '5:41 PM · May 12, 2026',
   },
 ];
@@ -71,32 +71,7 @@ function TestimonialCard({ card, i, progress, range, targetScale }: CardProps) {
       className="h-screen sticky top-0 flex justify-center items-start overflow-hidden"
       style={{ paddingTop: `calc(50vh - 160px + ${i * CARD_OFFSET}px)`, zIndex: i + 1 }}
     >
-      {/* Large background text — sits behind card */}
-      <div className="absolute inset-0 flex items-center pointer-events-none select-none overflow-hidden">
-        <span
-          className="absolute left-[-2vw] font-instrument italic text-[#1A1A1A] opacity-[0.07] whitespace-nowrap leading-none"
-          style={{ fontSize: '22vw' }}
-        >
-          AURA
-        </span>
-        <div
-          className="absolute right-[4vw] top-1/2 -translate-y-1/2 flex items-center justify-center"
-          style={{
-            backgroundColor: '#C9A227',
-            borderRadius: 12,
-            padding: '10px 28px',
-          }}
-        >
-          <span
-            className="font-instrument italic text-white leading-none"
-            style={{ fontSize: 'clamp(2rem, 5vw, 4rem)' }}
-          >
-            Love
-          </span>
-        </div>
-      </div>
-
-      <motion.div style={{ scale, transformOrigin: 'top center', width: 'min(88vw, 600px)', position: 'relative', zIndex: 2 }}>
+<motion.div style={{ scale, transformOrigin: 'top center', width: 'min(88vw, 600px)', position: 'relative', zIndex: 2 }}>
 
         {/* Main card */}
         <div
@@ -159,7 +134,29 @@ export function TestimonialsSection() {
   });
 
   return (
-    <div ref={containerRef}>
+    <div ref={containerRef} style={{ position: 'relative' }}>
+
+      {/* Single background layer — sticky, sits behind ALL cards */}
+      {/* <div
+        className="sticky top-0 h-screen pointer-events-none select-none overflow-hidden"
+        style={{ zIndex: 0, marginBottom: '-100vh' }}
+      >
+        <span
+          className="absolute left-[-2vw] top-1/2 -translate-y-1/2 font-instrument italic text-[#1A1A1A] opacity-[0.07] whitespace-nowrap leading-none"
+          style={{ fontSize: '22vw' }}
+        >
+          AURA
+        </span>
+        <div
+          className="absolute right-[4vw] top-1/2 -translate-y-1/2"
+          style={{ backgroundColor: '#C9A227', borderRadius: 12, padding: '10px 28px' }}
+        >
+          <span className="font-instrument italic text-white leading-none" style={{ fontSize: 'clamp(2rem, 5vw, 4rem)' }}>
+            Love
+          </span>
+        </div>
+      </div> */}
+
       {CARDS.map((card, i) => {
         const targetScale: number          = 1 - (N - i) * 0.05;
         const range: [number, number] = [i * (1 / N), 1];

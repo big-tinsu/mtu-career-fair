@@ -17,7 +17,7 @@ const tickerItems = [
 
 export function HeroSection({ event }: HeroSectionProps) {
   return (
-    <section className="min-h-screen bg-[#1A5430] flex flex-col relative overflow-hidden">
+    <section className="min-h-screen bg-[url('/images/bg-image.jpeg')] bg-cover bg-center bg-no-repeat flex flex-col relative overflow-hidden">
       {/* Radial glows */}
       <div className="absolute inset-0 pointer-events-none select-none">
         <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[600px] rounded-full bg-[#2D7A4F]/25 blur-[140px]" />
@@ -27,29 +27,29 @@ export function HeroSection({ event }: HeroSectionProps) {
       {/* Main content */}
       <div className="relative flex-1 flex flex-col justify-center px-6 md:px-12 lg:px-20 xl:px-28 pt-32 pb-16">
         {/* Label */}
-        <motion.p
+        {/* <motion.p
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="text-[#F2E4CC]/40 text-[10px] md:text-xs tracking-[0.35em] uppercase mb-6 md:mb-8 font-medium"
+          className="text-[#1A5430] text-[10px] md:text-xs tracking-[0.35em] uppercase mb-6 md:mb-8 font-medium"
         >
           Mountain Top University × SRC Present
-        </motion.p>
+        </motion.p> */}
 
         {/* AURA */}
-        <div className="overflow-hidden mb-1 md:mb-2">
+        {/* <div className="overflow-hidden mb-1 md:mb-2">
           <motion.h1
             initial={{ y: '110%' }}
             animate={{ y: 0 }}
             transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-            className="font-instrument italic text-[26vw] md:text-[22vw] lg:text-[18vw] xl:text-[16vw] leading-[0.82] tracking-tight text-[#F2E4CC] select-none"
+            className="font-instrument italic text-[26vw] md:text-[22vw] lg:text-[18vw] xl:text-[16vw] leading-[0.82] tracking-tight text-[#1A5430] select-none"
           >
             AURA
           </motion.h1>
-        </div>
+        </div> */}
 
         {/* Career Fair 2026 */}
-        <div className="overflow-hidden mb-8 md:mb-10">
+        {/* <div className="overflow-hidden mb-8 md:mb-10">
           <motion.div
             initial={{ y: '110%' }}
             animate={{ y: 0 }}
@@ -63,7 +63,7 @@ export function HeroSection({ event }: HeroSectionProps) {
               2026
             </span>
           </motion.div>
-        </div>
+        </div> */}
 
         {/* Tagline */}
         <motion.div
@@ -99,7 +99,7 @@ export function HeroSection({ event }: HeroSectionProps) {
         </motion.div>
 
         {/* CTAs */}
-        <motion.div
+        {/* <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 1.1 }}
@@ -122,7 +122,7 @@ export function HeroSection({ event }: HeroSectionProps) {
           >
             Learn more
           </motion.a>
-        </motion.div>
+        </motion.div> */}
       </div>
 
       {/* Scrolling ticker band */}

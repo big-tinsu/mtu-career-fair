@@ -11,6 +11,7 @@ import { ExpectSection } from '@/presentation/sections/ExpectSection';
 import { SpeakersSection } from '@/presentation/sections/SpeakersSection';
 import { TestimonialsSection } from '@/presentation/sections/TestimonialsSection';
 import { PartnersSection } from '@/presentation/sections/PartnersSection';
+import { FAQSection } from '@/presentation/sections/FAQSection';
 import { RegistrationCTASection } from '@/presentation/sections/RegistrationCTASection';
 import { eventStats } from '@/constants/eventData';
 
@@ -54,8 +55,9 @@ export default async function EventPage({ params }: PageProps) {
         <AboutSection event={event} />
         <SpeakersSection speakers={speakers} />
         <ExpectSection />
-        <TestimonialsSection />
         <PartnersSection partners={partners} />
+        <TestimonialsSection />
+        <FAQSection />
         <RegistrationCTASection event={event} />
       </main>
       <Footer event={event} />

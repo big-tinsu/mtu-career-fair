@@ -3,7 +3,6 @@
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
-import { FiArrowRight } from 'react-icons/fi';
 import { PartnerEntity } from '@/domain/types';
 import { viewportConfig } from '@/lib/animations';
 
@@ -11,56 +10,87 @@ interface PartnersSectionProps {
   partners: PartnerEntity[];
 }
 
-// Alternating card background colours for the grid slots
-const CARD_BG = ['#F2E4CC', '#226C3D', '#1A5430', '#8B6914', '#F2E4CC', '#226C3D'];
+const CARD_COLORS = [
+  '#226C3D',
+  '#C9A227',
+  '#1A5430',
+  '#8B6914',
+  '#2D5A3D',
+  '#A07C18',
+];
 
-function PartnerCard({
-  partner,
-  idx,
-}: {
-  partner: PartnerEntity;
-  idx: number;
-}) {
-  const bg      = CARD_BG[idx % CARD_BG.length];
-  const isDark  = bg !== '#F2E4CC';
-  const border  = isDark ? '#1A1A1A' : '#C4B89E';
+function PartnerCard({ partner, idx }: { partner: PartnerEntity; idx: number }) {
+  const bg = CARD_COLORS[idx % CARD_COLORS.length];
 
   return (
     <motion.a
       href={partner.website ?? '#'}
       target="_blank"
       rel="noopener noreferrer"
-      className="relative group flex flex-col rounded-2xl overflow-hidden focus:outline-none"
-      style={{ backgroundColor: bg, minHeight: 200 }}
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, scale: 0.88, y: 12 }}
+      whileInView={{ opacity: 1, scale: 1, y: 0 }}
       viewport={viewportConfig}
-      transition={{ duration: 0.6, delay: idx * 0.07, ease: [0.16, 1, 0.3, 1] }}
-      whileHover={{ scale: 1.02 }}
+      transition={{ duration: 0.5, delay: idx * 0.07, ease: [0.16, 1, 0.3, 1] }}
+      whileHover={{ y: -5, scale: 1.03 }}
+      className="focus:outline-none"
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        backgroundColor: bg,
+        borderRadius: 22,
+        padding: '22px 16px 14px',
+        aspectRatio: '1 / 1.15',
+        overflow: 'hidden',
+        cursor: 'pointer',
+        textDecoration: 'none',
+        boxShadow: '0 4px 0 rgba(0,0,0,0.35)',
+      }}
     >
-      {/* Card border */}
+      {/* Logo or name in center */}
       <div
-        className="absolute inset-0 pointer-events-none z-10 rounded-2xl"
-        style={{ border: `2px solid ${border}` }}
-      />
-
-      {/* Logo or name */}
-      <div className="flex-1 flex items-center justify-center p-8">
+        style={{
+          flex: 1,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: '100%',
+        }}
+      >
         {partner.logo ? (
-          <div className="relative w-full" style={{ height: 90 }}>
+          <div
+            style={{
+              position: 'relative',
+              width: '88%',
+              height: 90,
+              backgroundColor: 'rgba(255,255,255,0.15)',
+              borderRadius: 10,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '8px 12px',
+            }}
+          >
             <Image
               src={partner.logo}
               alt={partner.name}
               fill
-              className="object-contain transition-transform duration-500 group-hover:scale-[1.05]"
+              className="object-cover"
+              style={{ padding: '8px 12px' }}
+              sizes="320px"
             />
           </div>
         ) : (
           <p
-            className="font-instrument italic text-center leading-tight"
             style={{
-              fontSize: 'clamp(1.6rem, 3vw, 2.8rem)',
-              color: isDark ? '#F2E4CC' : '#1A1A1A',
+              fontFamily: '"Instrument Serif", Georgia, serif',
+              fontStyle: 'italic',
+              fontSize: 'clamp(1rem, 1.6vw, 1.4rem)',
+              color: 'rgba(255,255,255,0.92)',
+              textAlign: 'center',
+              lineHeight: 1.2,
+              padding: '0 8px',
             }}
           >
             {partner.name}
@@ -68,79 +98,110 @@ function PartnerCard({
         )}
       </div>
 
-      {/* Name badge */}
-      <div className="px-4 pb-5 flex justify-center z-10 relative">
-        <span
-          className="px-4 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-widest whitespace-nowrap shadow-sm"
+      {/* White pill label */}
+      <div
+        style={{
+          backgroundColor: 'rgba(255,255,255,0.95)',
+          borderRadius: 100,
+          padding: '5px 14px',
+          marginTop: 14,
+          maxWidth: '100%',
+          overflow: 'hidden',
+        }}
+      >
+        <p
           style={{
-            backgroundColor: isDark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.08)',
-            color: isDark ? '#F2E4CC' : '#1A1A1A',
+            fontFamily: '"Instrument Serif", Georgia, serif',
+            fontStyle: 'italic',
+            fontSize: '0.8rem',
+            color: '#1A1A1A',
+            whiteSpace: 'nowrap',
+            textOverflow: 'ellipsis',
+            overflow: 'hidden',
+            textAlign: 'center',
           }}
         >
-          {partner.description ?? partner.name}
-        </span>
+          {partner.name}
+        </p>
       </div>
     </motion.a>
   );
 }
 
 export function PartnersSection({ partners }: PartnersSectionProps) {
-  // Show up to 6 partners in the grid; prioritise those with logos
   const withLogo    = partners.filter(p => p.logo);
   const withoutLogo = partners.filter(p => !p.logo);
   const gridPartners = [...withLogo, ...withoutLogo].slice(0, 6);
 
   return (
-    <section id="partners" className="bg-[#F2E4CC] overflow-hidden" style={{ paddingTop: 0, paddingBottom: 0 }}>
-      <div className="flex min-h-[70vh] items-center">
+    <section id="partners" className="bg-[#F2E4CC] overflow-hidden">
+      <div className="flex min-h-[75vh] items-center">
 
-        {/* ── Left info panel ─────────────────────────── */}
-        <div
-          className="flex-shrink-0 flex flex-col justify-center"
+        {/* ── Left: 50% info panel ── */}
+        <motion.div
+          className="flex flex-col justify-center"
           style={{
-            width: 'clamp(260px, 30vw, 380px)',
-            padding: 'clamp(2.5rem, 5vw, 4.5rem)',
+            width: '50%',
+            padding: 'clamp(3rem, 6vw, 6rem)',
+            flexShrink: 0,
           }}
+          initial={{ opacity: 0, x: -32 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={viewportConfig}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         >
-          <motion.div
-            initial={{ opacity: 0, x: -24 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={viewportConfig}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <p className="text-[#226C3D] text-[10px] font-bold uppercase tracking-[0.3em] mb-6">
-              Official Partners
-            </p>
-            <h2
-              className="font-instrument italic text-[#1A1A1A] leading-[0.88] mb-6"
-              style={{ fontSize: 'clamp(2rem, 3.8vw, 3.6rem)' }}
-            >
-              Backed by<br />those who<br />believe in you.
-            </h2>
-            <p className="text-[#5C5046] text-sm leading-relaxed mb-10">
-              Industry-leading organisations supporting the next generation of Nigerian professionals.
-            </p>
-            <Link href="register">
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className="flex items-center gap-2.5 bg-[#226C3D] text-[#F2E4CC] font-bold text-sm px-6 py-3.5 rounded-full"
-              >
-                Register Free <FiArrowRight size={14} />
-              </motion.button>
-            </Link>
-          </motion.div>
-        </div>
+          <p className="text-[#226C3D] text-[10px] font-bold uppercase tracking-[0.3em] mb-6">
+            Official Partners
+          </p>
 
-        {/* ── 2×3 Partner grid ────────────────────────── */}
+          <h2
+            className="text-[#1A1A1A] leading-[0.9] mb-6"
+            style={{
+              fontFamily: '"Instrument Serif", Georgia, serif',
+              fontStyle: 'italic',
+              fontSize: 'clamp(2.8rem, 5vw, 5.5rem)',
+            }}
+          >
+            Backed by those<br />who
+            {' '}
+            <span
+              style={{
+                display: 'inline',
+                backgroundColor: '#C9A227',
+                color: '#F2E4CC',
+                padding: '0.05em 0.25em',
+                borderRadius: 8,
+              }}
+            >
+              believe in you.
+            </span>
+          </h2>
+
+          <p className="text-[#5C5046] text-sm leading-relaxed mb-10" style={{ maxWidth: 380 }}>
+            Industry-leading organisations supporting the next generation of Nigerian professionals.
+          </p>
+
+          <Link href="register">
+            <motion.button
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              className="flex items-center gap-2.5 bg-[#226C3D] text-[#F2E4CC] font-bold text-sm px-7 py-3.5 rounded-full w-fit"
+              style={{ boxShadow: '0 4px 0 #1A5430' }}
+            >
+              Register Free →
+            </motion.button>
+          </Link>
+        </motion.div>
+
+        {/* ── Right: 3×2 colorful grid ── */}
         <div
-          className="flex-1 grid gap-4"
           style={{
+            width: '50%',
+            flexShrink: 0,
+            padding: 'clamp(2rem, 4vw, 4rem) clamp(2rem, 4vw, 4rem) clamp(2rem, 4vw, 4rem) 0',
+            display: 'grid',
             gridTemplateColumns: 'repeat(3, 1fr)',
-            gridAutoRows: 'minmax(180px, 220px)',
-            padding: 'clamp(1.5rem, 4vw, 3rem)',
-            alignContent: 'center',
-            alignItems: 'center',
+            gap: 12,
           }}
         >
           {gridPartners.map((partner, idx) => (

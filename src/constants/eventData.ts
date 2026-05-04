@@ -39,10 +39,10 @@ Join us for expert panel discussions, direct engagement with recruiters and indu
 export const mockSpeakers: SpeakerEntity[] = [
   {
     id: 'spk-001',
-    name: 'Apostle Ayoboluwa Glory',
-    title: 'Spiritual Leader & Career Mentor',
-    company: 'Glory Ministries International',
-    bio: 'A visionary leader dedicated to empowering the next generation to discover purpose beyond the classroom. Known for his transformational teachings on faith, career, and excellence.',
+    name: 'Apostle Ayooluwa Glory',
+    title: 'Lead Pastor, Doxazo Global',
+    company: 'Doxazo Global',
+    bio: 'Lead Pastor of Doxazo Global — a purpose-driven leader and visionary trailblazer rooted in Lagos, Nigeria, with campus annexes in Sunderland, UK and New Brunswick, Canada. He holds a BSc in Mass Communication from Mountain Top University and a Master\'s in Sociology and Humanities, with certifications in Project Management, Entrepreneurship, and Facility Management. Driven by a clear Apostolic mandate to raise leaders who walk in kingdom authority, develop leadership capacity, and live out God\'s purpose with boldness and lasting impact.',
     type: 'panelist',
     photo: '/images/speakers/speaker.jpeg',
     tags: ['Leadership', 'Purpose', 'Mentorship'],
@@ -85,7 +85,7 @@ export const mockSpeakers: SpeakerEntity[] = [
     name: 'Omodolapo Ajaguma',
     title: 'Corporate Executive & Coach',
     company: 'Future Leaders Foundation',
-    bio: 'Omodolapo is a seasoned corporate professional and life coach who has helped hundreds of young Nigerians navigate the transition from campus to career with confidence.',
+    bio: 'Omodolapo Ajagunna is a Nigerian fashion entrepreneur, Creative director, and CEO of Adire Enroyale—a contemporary brand dedicated to elevating traditional Adire textiles into modern, globally relevant fashion pieces. With a strong focus on cultural preservation and innovation, she has positioned Adire Enroyale as a brand that blends heritage craftsmanship with refined, premium design aesthetics. Through her work, Omodolapo champions the storytelling power of indigenous fabrics, contributing to the growing movement to promote Adire as a globally recognized cultural symbol.  ￼As a CEO, she is recognized for her commitment to supporting sustainable production and creating fashion that reflects both African identity and modern sophistication. Her leadership reflects a broader vision to place Nigerian textile artistry on the international stage while building a scalable, culturally rooted fashion business. She has also trained people who are now also business owners. She holds a Bachelor’s degree in Business Administration from Mountain Top University and also serves as a worship/music minister within and outside her church community. She’s happily married and blessed with a beautiful daughter.',
     type: 'panelist',
     photo: '/images/speakers/speaker4.JPG',
     linkedIn: '#',
@@ -95,7 +95,7 @@ export const mockSpeakers: SpeakerEntity[] = [
 
 export const mockPartners: PartnerEntity[] = [
   { id: 'p-001', name: 'TOEFL', tier: 'platinum', logo: '/images/partners/toefl.jpeg', logoColor: '#004B87', website: '#' },
-  { id: 'p-009', name: 'Hadley', tier: 'platinum', logo: '/images/partners/hadley.jpg', logoColor: '#1A1A1A', website: '#' },
+  { id: 'p-009', name: 'Hadley', tier: 'platinum', logo: '/images/partners/htg-logo.png', logoColor: '#1A1A1A', website: '#' },
   { id: 'p-010', name: 'Techie Academy', tier: 'gold', logo: '/images/partners/techie-academy.png', logoColor: '#226C3D', website: '#' },
   // { id: 'p-002', name: 'GTBank', tier: 'gold', logoColor: '#F26522', website: '#' },
   // { id: 'p-003', name: 'Access Bank', tier: 'gold', logoColor: '#E31E2D', website: '#' },
