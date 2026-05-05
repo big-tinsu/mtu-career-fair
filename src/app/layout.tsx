@@ -46,7 +46,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       </head>
       <body className={`${inter.variable} antialiased bg-[#F2E4CC] text-[#1A1A1A]`}>
         <MobileBlock />
-        <div className="hidden md:block">
+        <div className="hidden lg:block">
           <Providers>{children}</Providers>
         </div>
       </body>

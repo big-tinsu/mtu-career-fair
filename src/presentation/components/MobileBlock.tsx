@@ -1,6 +1,6 @@
 export function MobileBlock() {
   return (
-    <div className="md:hidden min-h-screen bg-[#ECEDF2] flex items-center justify-center p-6">
+    <div className="lg:hidden min-h-screen bg-[#ECEDF2] flex items-center justify-center p-6">
       <div className="bg-white rounded-2xl shadow-sm px-8 py-10 max-w-sm w-full text-center">
         {/* Logo */}
         <div className="flex items-center justify-center gap-2.5 mb-8">
