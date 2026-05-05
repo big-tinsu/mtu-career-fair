@@ -165,7 +165,7 @@ export function Footer({ event }: FooterProps) {
           © 2026 AURA Career Fair · MTU Students&apos; Representative Council
         </p>
         <p className="text-[#9C8E7C] text-xs">
-          May 11, 2026 · Ogun State, Nigeria
+          Code by <a href="https://github.com/big-tinsu" target="_blank" rel="noopener noreferrer" className="underline hover:text-[#C8B99A] transition-colors">Tinsu</a>
         </p>
       </div>
 
