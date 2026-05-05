@@ -81,7 +81,8 @@ export function HeroSection({ event }: HeroSectionProps) {
           transition={{ duration: 0.6, delay: 0.72 }}
           className="flex flex-wrap items-center justify-center gap-3"
         >
-          <Link href={`/events/${event.slug}/register`}>
+          {/* <Link href={`/events/${event.slug}/register`}> */}
+          <Link href={'https://luma.com/j281yy78'}>
             <motion.button
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
