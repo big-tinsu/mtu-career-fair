@@ -50,8 +50,8 @@ export const mockSpeakers: SpeakerEntity[] = [
   {
     id: 'spk-002',
     name: 'Oluwafemi Oladapo',
-    title: 'Senior Executive & Career Strategist',
-    company: 'Industry Leader',
+    title: 'Storyteller, Brand & PR Strategist',
+    company: 'Founder of Northstar',
     bio: "Oluwaferanmi Oladapo is a storyteller, brand, and PR strategist who helps brands identify their voice and use it with clarity and consistency. She is a graduate of English and literary studies from Mountain Top University. Her work is rooted in simplifying complex ideas into compelling stories that connect, build trust, and drive growth. Across industries, including media, real estate, oil and gas, faith, fintech, lifestyle, telecom, and fashion, she has led brand and communication strategies that position brands with intention and impact. She is also the founder of Northstar, an initiative dedicated to equipping aspiring content writers with the skills to write with purpose, think strategically, and monetise their creativity. At the core of her work is a focus on intentionality and impact, helping brands and individuals show up meaningfully, communicate effectively, and remain relevant in a constantly evolving world.",
     type: 'panelist',
     photo: '/images/speakers/speaker2.jpeg',
@@ -72,7 +72,7 @@ export const mockSpeakers: SpeakerEntity[] = [
   {
     id: 'spk-005',
     name: 'Stephanie Ugbor',
-    title: 'Human Resources Director',
+    title: 'Supply Chain Professional',
     company: '---',
     bio: 'Stephanie Ugbor, also known as Stefikal, is a supply chain professional with a background in pharmacy and a natural communicator who thrives on the mic. She has been hosting and coordinating events since her university days, known for guiding conversations with clarity, composure, and an intuitive sense of audience engagement. Her style is thoughtful and structured, creating space for ideas to be heard while keeping the energy of the room steady and connected. Beyond hosting, Stephanie is a writer, creative, and public speaker, passionate about growth, excellence, and meaningful impact. She believes her voice is a gift and uses it intentionally to inform, inspire, and connect with people.',
     type: 'moderator',
@@ -113,8 +113,8 @@ export const mockSpeakers: SpeakerEntity[] = [
   {
     id: 'spk-004',
     name: 'Omodolapo Ajaguma',
-    title: 'Corporate Executive & Coach',
-    company: 'Future Leaders Foundation',
+    title: 'Nigerian Fashion Entrepreneur',
+    company: 'CEO, Adire Enroyale',
     bio: 'Omodolapo Ajagunna is a Nigerian fashion entrepreneur, Creative director, and CEO of Adire Enroyale—a contemporary brand dedicated to elevating traditional Adire textiles into modern, globally relevant fashion pieces. With a strong focus on cultural preservation and innovation, she has positioned Adire Enroyale as a brand that blends heritage craftsmanship with refined, premium design aesthetics. Through her work, Omodolapo champions the storytelling power of indigenous fabrics, contributing to the growing movement to promote Adire as a globally recognized cultural symbol.  ￼As a CEO, she is recognized for her commitment to supporting sustainable production and creating fashion that reflects both African identity and modern sophistication. Her leadership reflects a broader vision to place Nigerian textile artistry on the international stage while building a scalable, culturally rooted fashion business. She has also trained people who are now also business owners. She holds a Bachelor’s degree in Business Administration from Mountain Top University and also serves as a worship/music minister within and outside her church community. She’s happily married and blessed with a beautiful daughter.',
     type: 'panelist',
     photo: '/images/speakers/speaker4.JPG',
