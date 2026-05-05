@@ -55,7 +55,7 @@ export function SpeakerPanel({ speaker, onClose }: SpeakerPanelProps) {
                   src={speaker.photo}
                   alt={speaker.name}
                   fill
-                  className="object-cover object-top"
+                  className={cn('object-cover', speaker.photoPosition ?? 'object-top')}
                 />
               ) : (
                 <div
