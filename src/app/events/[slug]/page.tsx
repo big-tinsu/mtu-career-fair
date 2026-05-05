@@ -48,9 +48,9 @@ export default async function EventPage({ params }: PageProps) {
     fetchPartners(event.id),
   ]);
 
-  const panelists = allSpeakers.filter(s => s.type === 'panelist' || s.type === 'keynote' || s.type === 'speaker');
-  const moderator = allSpeakers.find(s => s.type === 'moderator') ?? null;
-  const spotlight = allSpeakers.find(s => s.type === 'spotlight') ?? null;
+  const panelists  = allSpeakers.filter(s => s.type === 'panelist' || s.type === 'keynote' || s.type === 'speaker');
+  const moderators = allSpeakers.filter(s => s.type === 'moderator');
+  const spotlight  = allSpeakers.find(s => s.type === 'spotlight') ?? null;
 
   return (
     <div className="min-h-screen bg-[#F2E4CC] text-[#1A1A1A]">
@@ -59,7 +59,7 @@ export default async function EventPage({ params }: PageProps) {
         <HeroSection event={event} />
         <AboutSection event={event} />
         <SpeakersSection speakers={panelists} />
-        {moderator && <ModeratorSection moderator={moderator} />}
+        {moderators.length > 0 && <ModeratorSection moderators={moderators} />}
         {spotlight && <SpotlightSection speaker={spotlight} />}
         <ExpectSection />
         <PartnersSection partners={partners} />
