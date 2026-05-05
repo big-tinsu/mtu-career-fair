@@ -90,8 +90,8 @@ export function RegistrationCTASection({ event: _event }: Props) {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.5 }}
                 transition={{ duration: 0.7, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                className="relative z-10 text-[#F2E4CC]/55 leading-relaxed"
-                style={{ fontSize: 'clamp(0.9rem, 1.4vw, 1.1rem)', maxWidth: 520 }}
+                className="relative z-10 leading-relaxed"
+                style={{ fontSize: 'clamp(0.9rem, 1.4vw, 1.1rem)', maxWidth: 520, color: 'rgba(242, 228, 204, 0.7)' }}
               >
                 No stuffy conference rooms, no dull corporate halls — just industry leaders, real recruiters, and a community of driven professionals ready to help you go beyond the degree.
               </motion.p>

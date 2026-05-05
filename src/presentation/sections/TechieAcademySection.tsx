@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { viewportConfig } from '@/lib/animations';
@@ -26,17 +26,47 @@ const VIDEOS = [
 
 export function TechieAcademySection() {
   const [activeIndex, setActiveIndex] = useState(0);
+  const sectionRef  = useRef<HTMLElement>(null);
+  const videoRef    = useRef<HTMLVideoElement>(null);
+  const isVisibleRef = useRef(false);
 
-  const handleNext = () => {
-    setActiveIndex((prev) => (prev + 1) % VIDEOS.length);
-  };
+  // Watch section visibility and play/pause accordingly
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
 
-  const handlePrev = () => {
-    setActiveIndex((prev) => (prev - 1 + VIDEOS.length) % VIDEOS.length);
-  };
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isVisibleRef.current = entry.isIntersecting;
+        const video = videoRef.current;
+        if (!video) return;
+        if (entry.isIntersecting) {
+          video.play().catch(() => {});
+        } else {
+          video.pause();
+        }
+      },
+      { threshold: 0.25 }
+    );
+
+    observer.observe(section);
+    return () => observer.disconnect();
+  }, []);
+
+  // When the active video changes, auto-play if section is still visible
+  useEffect(() => {
+    if (!isVisibleRef.current) return;
+    const video = videoRef.current;
+    if (!video) return;
+    video.play().catch(() => {});
+  }, [activeIndex]);
+
+  const handleNext = () => setActiveIndex((prev) => (prev + 1) % VIDEOS.length);
+  const handlePrev = () => setActiveIndex((prev) => (prev - 1 + VIDEOS.length) % VIDEOS.length);
 
   return (
     <section
+      ref={sectionRef}
       id='techie-academy'
       className='bg-[#F2E4CC] py-12 md:py-16 overflow-hidden'
     >
@@ -75,7 +105,7 @@ export function TechieAcademySection() {
           className="flex flex-col lg:flex-row items-start gap-8"
           style={{ gap: 'clamp(2rem, 5vw, 4rem)' }}
         >
-          {/* Left: Image — matches FAQ style */}
+          {/* Left: Image */}
           <motion.div
             className="hidden md:block flex-shrink-0"
             style={{ width: '38%', position: 'sticky', top: '7rem' }}
@@ -101,7 +131,6 @@ export function TechieAcademySection() {
                 className="object-cover"
                 sizes="40vw"
               />
-              {/* Gold label overlay */}
               <div
                 className="absolute bottom-5 left-5"
                 style={{
@@ -124,36 +153,34 @@ export function TechieAcademySection() {
             </div>
           </motion.div>
 
-          {/* Right: Manual Video Slider */}
+          {/* Right: Video Slider */}
           <div className='flex-1 basis-1/2 w-full mx-auto lg:mx-0'>
             <div className="relative mx-auto lg:mx-0 rounded-none border-2 border-[#1A1A1A] bg-white shadow-[0_10px_0_#1A1A1A]">
-                  <div className='relative bg-[#1A1A1A] h-[500px] flex items-center justify-center'>
-                    <video
-                      className='max-h-full max-w-full object-contain'
-                      src={VIDEOS[activeIndex].src}
-                      controls
-                      autoPlay
-                      playsInline
-                      preload='metadata'
-                      key={activeIndex}
-                    />
-                  </div>
-                  <div className='px-5 py-4 bg-white border-t-2 border-[#1A1A1A]'>
-                    <p className='text-base font-semibold text-[#1A1A1A] truncate'>
-                      {VIDEOS[activeIndex].title}
-                    </p>
-                    <div className='flex items-center justify-between mt-2'>
-                      <p className='text-xs text-[#7A6F62]'>
-                        Techie Academy alumni
-                      </p>
-                      <p className='text-xs font-bold text-[#1A1A1A]'>
-                        {activeIndex + 1} / {VIDEOS.length}
-                      </p>
-                    </div>
-                  </div>
+              <div className='relative bg-[#1A1A1A] h-[500px] flex items-center justify-center'>
+                <video
+                  ref={videoRef}
+                  key={activeIndex}
+                  className='max-h-full max-w-full object-contain'
+                  src={VIDEOS[activeIndex].src}
+                  controls
+                  playsInline
+                  preload='metadata'
+                />
+              </div>
+              <div className='px-5 py-4 bg-white border-t-2 border-[#1A1A1A]'>
+                <p className='text-base font-semibold text-[#1A1A1A] truncate'>
+                  {VIDEOS[activeIndex].title}
+                </p>
+                <div className='flex items-center justify-between mt-2'>
+                  <p className='text-xs text-[#7A6F62]'>Techie Academy alumni</p>
+                  <p className='text-xs font-bold text-[#1A1A1A]'>
+                    {activeIndex + 1} / {VIDEOS.length}
+                  </p>
+                </div>
+              </div>
             </div>
 
-            {/* Custom Controls */}
+            {/* Controls */}
             <div className='mt-8 flex items-center gap-4 justify-center'>
               <button
                 onClick={handlePrev}

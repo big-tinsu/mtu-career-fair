@@ -9,15 +9,41 @@ interface FooterProps {
   event: EventEntity;
 }
 
+type FormStatus = 'idle' | 'loading' | 'success' | 'error';
 
 export function Footer({ event }: FooterProps) {
-  const [firstName, setFirstName] = useState('');
-  const [email, setEmail]         = useState('');
+  const [name, setName]     = useState('');
+  const [email, setEmail]   = useState('');
+  const [status, setStatus] = useState<FormStatus>('idle');
+  const [message, setMessage] = useState('');
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    // Navigate to registration page with prefilled values
-    window.location.href = `/events/${event.slug}/register?name=${encodeURIComponent(firstName)}&email=${encodeURIComponent(email)}`;
+    setStatus('loading');
+    setMessage('');
+
+    try {
+      const res = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email }),
+      });
+
+      const data: { message?: string; error?: string } = await res.json();
+
+      if (!res.ok) {
+        setStatus('error');
+        setMessage(data.error ?? 'Something went wrong. Please try again.');
+      } else {
+        setStatus('success');
+        setMessage(data.message ?? "You're in the loop!");
+        setName('');
+        setEmail('');
+      }
+    } catch {
+      setStatus('error');
+      setMessage('Network error. Please check your connection and try again.');
+    }
   }
 
   return (
@@ -59,49 +85,61 @@ export function Footer({ event }: FooterProps) {
                 <FiInstagram size={16} /> Instagram
               </a>
             )}
-            {/* {event.socialLinks?.twitter && (
-              <a
-                href={event.socialLinks.twitter}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-1.5 text-[#1A1A1A]/60 hover:text-[#1A1A1A] transition-colors text-sm font-medium"
-              >
-                <FiTwitter size={16} /> Twitter
-              </a>
-            )} */}
           </div>
         </div>
 
-        {/* Right: email sign-up form */}
+        {/* Right: Stay in the loop form */}
         <div className="flex-shrink-0" style={{ width: 'clamp(280px, 36vw, 480px)' }}>
           <p className="text-[#226C3D] text-[10px] font-bold uppercase tracking-[0.28em] mb-4">
             Stay in the loop
           </p>
-          <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-            <div className="flex gap-3">
-              <input
-                type="text"
-                placeholder="Full Name"
-                value={firstName}
-                onChange={e => setFirstName(e.target.value)}
-                className="flex-1 bg-white border-2 border-[#D5C9B3] rounded-full px-5 py-3.5 text-sm text-[#1A1A1A] placeholder:text-[#9C8E7C] focus:outline-none focus:border-[#226C3D] transition-colors"
-              />
-              <input
-                type="email"
-                placeholder="Email"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                required
-                className="flex-1 bg-white border-2 border-[#D5C9B3] rounded-full px-5 py-3.5 text-sm text-[#1A1A1A] placeholder:text-[#9C8E7C] focus:outline-none focus:border-[#226C3D] transition-colors"
-              />
+
+          {status === 'success' ? (
+            <div className="bg-[#226C3D]/10 border border-[#226C3D]/25 rounded-2xl px-6 py-5">
+              <p className="text-[#226C3D] font-semibold text-sm leading-relaxed">{message}</p>
+              <button
+                onClick={() => setStatus('idle')}
+                className="mt-3 text-[#226C3D]/60 text-xs underline underline-offset-2 hover:text-[#226C3D] transition-colors"
+              >
+                Subscribe another email
+              </button>
             </div>
-            <button
-              type="submit"
-              className="w-full bg-[#226C3D] text-[#F2E4CC] font-bold text-sm py-4 rounded-full hover:bg-[#1A5430] transition-colors"
-            >
-              Register for Free
-            </button>
-          </form>
+          ) : (
+            <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+              <div className="flex gap-3">
+                <input
+                  type="text"
+                  placeholder="Full Name"
+                  value={name}
+                  onChange={e => setName(e.target.value)}
+                  required
+                  disabled={status === 'loading'}
+                  className="flex-1 bg-white border-2 border-[#D5C9B3] rounded-full px-5 py-3.5 text-sm text-[#1A1A1A] placeholder:text-[#9C8E7C] focus:outline-none focus:border-[#226C3D] transition-colors disabled:opacity-60"
+                />
+                <input
+                  type="email"
+                  placeholder="Email"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  required
+                  disabled={status === 'loading'}
+                  className="flex-1 bg-white border-2 border-[#D5C9B3] rounded-full px-5 py-3.5 text-sm text-[#1A1A1A] placeholder:text-[#9C8E7C] focus:outline-none focus:border-[#226C3D] transition-colors disabled:opacity-60"
+                />
+              </div>
+
+              {status === 'error' && (
+                <p className="text-red-600 text-xs px-1">{message}</p>
+              )}
+
+              <button
+                type="submit"
+                disabled={status === 'loading'}
+                className="w-full bg-[#226C3D] text-[#F2E4CC] font-bold text-sm py-4 rounded-full hover:bg-[#1A5430] transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+              >
+                {status === 'loading' ? 'Submitting…' : 'Stay in the Loop'}
+              </button>
+            </form>
+          )}
 
           {/* Quick links */}
           <div className="flex gap-6 mt-6">
@@ -117,25 +155,6 @@ export function Footer({ event }: FooterProps) {
           </div>
         </div>
       </div>
-
-      {/* ── Speaker photo strip ──────────────────────────────────── */}
-      {/* <div className="flex items-end w-full overflow-hidden">
-        {SPEAKER_PHOTOS.map((photo) => (
-          <div
-            key={photo.src}
-            className="relative flex-1 flex-shrink-0 overflow-hidden"
-            style={{ height: photo.h, backgroundColor: photo.color }}
-          >
-            <Image
-              src={photo.src}
-              alt={photo.name}
-              fill
-              className="object-cover object-top"
-              sizes="20vw"
-            />
-          </div>
-        ))}
-      </div> */}
 
       {/* ── Copyright bar ────────────────────────────────────────── */}
       <div
