@@ -49,6 +49,7 @@ export interface SpeakerEntity {
   company: string;
   bio: string;
   photo?: string;
+  photoPosition?: string;
   linkedIn?: string;
   twitter?: string;
   type: SpeakerType;

@@ -98,6 +98,7 @@ export const mockSpeakers: SpeakerEntity[] = [
     bio: 'Tiffany Ambrose is a recent Anatomy graduate from Babcock University with a 4.21 CGPA and a growing focus on Occupational Health and Safety. She has completed globally recognised certifications with distinctions in health, leadership, and workplace wellbeing from institutions such as Stanford University and the University of Pennsylvania. With a strong interest in career development and professional positioning, Tiffany has built a rapidly growing network of professionals across industries by leveraging strategic communication and digital platforms. She is passionate about helping students bridge the gap between academic knowledge and real-world opportunities through intentional learning, networking, and self-development.',
     type: 'spotlight',
     photo: '/images/speakers/spotlight.png',
+    photoPosition: 'object-[center_70%]',
     tags: ['Career Development', 'Networking', 'Self-Development'],
   },
   {
