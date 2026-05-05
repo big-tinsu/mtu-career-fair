@@ -1,10 +1,12 @@
 'use client';
 
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { SpeakerEntity } from '@/domain/types';
 import { viewportConfig } from '@/lib/animations';
 import { getInitials } from '@/lib/utils';
+import { SpeakerPanel } from '../ui/SpeakerPanel';
 
 interface ModeratorSectionProps {
   moderators: SpeakerEntity[];
@@ -13,9 +15,10 @@ interface ModeratorSectionProps {
 interface CardProps {
   moderator: SpeakerEntity;
   index: number;
+  onOpen: (m: SpeakerEntity) => void;
 }
 
-function ModeratorCard({ moderator, index }: CardProps) {
+function ModeratorCard({ moderator, index, onOpen }: CardProps) {
   return (
     <motion.div
       className="flex flex-col sm:flex-row gap-8 items-start"
@@ -74,40 +77,61 @@ function ModeratorCard({ moderator, index }: CardProps) {
           ))}
         </div>
 
-        <p className="text-[#5C5046] text-sm leading-relaxed">
+        {/* Clamped bio */}
+        <p
+          className="text-[#5C5046] text-sm leading-relaxed mb-2"
+          style={{
+            display: '-webkit-box',
+            WebkitLineClamp: 3,
+            WebkitBoxOrient: 'vertical',
+            overflow: 'hidden',
+          } as React.CSSProperties}
+        >
           {moderator.bio}
         </p>
+
+        <button
+          onClick={() => onOpen(moderator)}
+          className="text-[#226C3D] text-xs font-semibold hover:text-[#1A5430] transition-colors"
+        >
+          See more →
+        </button>
       </div>
     </motion.div>
   );
 }
 
 export function ModeratorSection({ moderators }: ModeratorSectionProps) {
+  const [selected, setSelected] = useState<SpeakerEntity | null>(null);
+
   if (moderators.length === 0) return null;
 
   return (
-    <section className="bg-[#F2E4CC] px-6 md:px-12 lg:px-20 pb-20">
-      <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+    <>
+      <section className="bg-[#F2E4CC] px-6 md:px-12 lg:px-20 pb-20">
+        <div style={{ maxWidth: 1100, margin: '0 auto' }}>
 
-        {/* Divider + label */}
-        <div className="w-full h-px bg-[#1A1A1A]/10 mb-14" />
-        <motion.p
-          className="text-[#226C3D] text-[10px] font-bold uppercase tracking-[0.3em] mb-12"
-          initial={{ opacity: 0, y: 12 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={viewportConfig}
-          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-        >
-          Meet Our Moderator{moderators.length > 1 ? 's' : ''}
-        </motion.p>
+          <div className="w-full h-px bg-[#1A1A1A]/10 mb-14" />
+          <motion.p
+            className="text-[#226C3D] text-[10px] font-bold uppercase tracking-[0.3em] mb-12"
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={viewportConfig}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          >
+            Meet Our Moderator{moderators.length > 1 ? 's' : ''}
+          </motion.p>
 
-        <div className="flex flex-col gap-14">
-          {moderators.map((m, i) => (
-            <ModeratorCard key={m.id} moderator={m} index={i} />
-          ))}
+          <div className="flex flex-col gap-14">
+            {moderators.map((m, i) => (
+              <ModeratorCard key={m.id} moderator={m} index={i} onOpen={setSelected} />
+            ))}
+          </div>
+
         </div>
+      </section>
 
-      </div>
-    </section>
+      <SpeakerPanel speaker={selected} onClose={() => setSelected(null)} />
+    </>
   );
 }
