@@ -124,9 +124,9 @@ export const mockSpeakers: SpeakerEntity[] = [
 ];
 
 export const mockPartners: PartnerEntity[] = [
-  { id: 'p-001', name: 'TOEFL', tier: 'platinum', logo: '/images/partners/toefl.jpeg', logoColor: '#004B87', website: '#' },
-  { id: 'p-009', name: 'Hadley', tier: 'platinum', logo: '/images/partners/htg-logo.png', logoColor: '#1A1A1A', website: '#' },
-  { id: 'p-010', name: 'Techie Academy', tier: 'gold', logo: '/images/partners/techie-academy.png', logoColor: '#226C3D', website: '#' },
+  { id: 'p-001', name: 'TOEFL', tier: 'platinum', logo: '/images/partners/toefl.jpeg', logoColor: '#004B87', website: 'https://www.ets.org/toefl' },
+  { id: 'p-009', name: 'Hadley', tier: 'platinum', logo: '/images/partners/htg-logo.png', logoColor: '#1A1A1A' },
+  { id: 'p-010', name: 'Techie Academy', tier: 'gold', logo: '/images/partners/techie-academy.png', logoColor: '#226C3D', website: 'https://thetechieacademy.com' },
   // { id: 'p-002', name: 'GTBank', tier: 'gold', logoColor: '#F26522', website: '#' },
   // { id: 'p-003', name: 'Access Bank', tier: 'gold', logoColor: '#E31E2D', website: '#' },
   // { id: 'p-004', name: 'Andela', tier: 'silver', logoColor: '#15803D', website: '#' },

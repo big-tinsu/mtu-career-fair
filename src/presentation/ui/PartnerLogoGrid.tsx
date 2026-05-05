@@ -18,30 +18,42 @@ const tierConfig: Record<PartnerTier, { label: string; cardH: string; textSize: 
 };
 
 function PartnerCard({ partner, cardH, textSize }: { partner: PartnerEntity; cardH: string; textSize: string }) {
+  const inner = partner.logo ? (
+    <div className="relative w-28 h-10">
+      <Image src={partner.logo} alt={partner.name} fill className="object-contain" />
+    </div>
+  ) : (
+    <span className={cn('font-manrope tracking-tight', textSize)} style={{ color: partner.logoColor ?? '#226C3D' }}>
+      {partner.name}
+    </span>
+  );
+
+  const sharedClass = cn(
+    'flex items-center justify-center px-8 rounded-2xl min-w-[140px]',
+    'bg-white border border-[#E8D9BE]',
+    'shadow-[0_2px_8px_rgba(28,28,28,0.05)]',
+    'transition-all duration-200',
+    cardH,
+  );
+
+  if (!partner.website) {
+    return (
+      <motion.div variants={fadeInUp} className={sharedClass}>
+        {inner}
+      </motion.div>
+    );
+  }
+
   return (
     <motion.a
       variants={fadeInUp}
-      href={partner.website ?? '#'}
+      href={partner.website}
       target="_blank"
       rel="noopener noreferrer"
       whileHover={{ scale: 1.03, y: -2, transition: { duration: 0.2 } }}
-      className={cn(
-        'flex items-center justify-center px-8 rounded-2xl min-w-[140px]',
-        'bg-white border border-[#E8D9BE] hover:border-[rgba(34,108,61,0.3)]',
-        'shadow-[0_2px_8px_rgba(28,28,28,0.05)] hover:shadow-[0_6px_20px_rgba(28,28,28,0.1)]',
-        'transition-all duration-200 cursor-pointer',
-        cardH,
-      )}
+      className={cn(sharedClass, 'hover:border-[rgba(34,108,61,0.3)] hover:shadow-[0_6px_20px_rgba(28,28,28,0.1)] cursor-pointer')}
     >
-      {partner.logo ? (
-        <div className="relative w-28 h-10">
-          <Image src={partner.logo} alt={partner.name} fill className="object-contain" />
-        </div>
-      ) : (
-        <span className={cn('font-manrope tracking-tight', textSize)} style={{ color: partner.logoColor ?? '#226C3D' }}>
-          {partner.name}
-        </span>
-      )}
+      {inner}
     </motion.a>
   );
 }
